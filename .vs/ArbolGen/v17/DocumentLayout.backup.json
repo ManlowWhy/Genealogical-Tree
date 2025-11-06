@@ -1,9 +1,21 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-master\\Genealogical-Tree-master\\",
+  "WorkspaceRootPath": "C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|C:\\Users\\olman\\Downloads\\Genealogical-Tree-master\\Genealogical-Tree-master\\formmapa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|c:\\users\\olman\\downloads\\distnacia entre puntos\\genealogical-tree-master\\genealogical-tree-master\\formregistro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|solutionrelative:formregistro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\formregistro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|solutionrelative:formregistro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\formregistro.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|solutionrelative:formregistro.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\formmapa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|solutionrelative:formmapa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -14,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,16 +34,51 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "FormMapa.cs",
-              "DocumentMoniker": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-master\\Genealogical-Tree-master\\FormMapa.cs",
-              "RelativeDocumentMoniker": "FormMapa.cs",
-              "ToolTip": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-master\\Genealogical-Tree-master\\FormMapa.cs",
-              "RelativeToolTip": "FormMapa.cs",
-              "ViewState": "AgIAAGoAAAAAAAAAAADgv3AAAAAEAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "FormRegistro.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\FormRegistro.Designer.cs",
+              "RelativeDocumentMoniker": "FormRegistro.Designer.cs",
+              "ToolTip": "C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\FormRegistro.Designer.cs",
+              "RelativeToolTip": "FormRegistro.Designer.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T04:28:49.533Z",
+              "WhenOpened": "2025-11-06T07:55:41.031Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FormRegistro.cs",
+              "DocumentMoniker": "C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\FormRegistro.cs",
+              "RelativeDocumentMoniker": "FormRegistro.cs",
+              "ToolTip": "C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\FormRegistro.cs",
+              "RelativeToolTip": "FormRegistro.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJgAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-06T07:54:08.304Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FormRegistro.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\FormRegistro.cs",
+              "RelativeDocumentMoniker": "FormRegistro.cs",
+              "ToolTip": "C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\FormRegistro.cs [Dise\u00F1o]",
+              "RelativeToolTip": "FormRegistro.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-06T07:52:05.174Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FormMapa.cs",
+              "DocumentMoniker": "C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\FormMapa.cs",
+              "RelativeDocumentMoniker": "FormMapa.cs",
+              "ToolTip": "C:\\Users\\olman\\Downloads\\Distnacia entre puntos\\Genealogical-Tree-master\\Genealogical-Tree-master\\FormMapa.cs",
+              "RelativeToolTip": "FormMapa.cs",
+              "ViewState": "AgIAAGkAAAAAAAAAAADgv3EAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-05T04:28:49.533Z"
             }
           ]
         }

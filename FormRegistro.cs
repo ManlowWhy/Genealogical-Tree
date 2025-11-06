@@ -150,7 +150,7 @@ namespace MapaTest
 
         private void buttonAgregarFamiliar_Click(object sender, EventArgs e)
         {
-            const string formatoFecha = "dd/MM/yyyy";
+            
             var culture = CultureInfo.InvariantCulture;
 
             // === Validaciones de entrada ===
@@ -170,12 +170,17 @@ namespace MapaTest
                 comboBoxParentezco.Focus(); return;
             }
 
-            DateTime fechaNacimientoValida;
-            if (!DateTime.TryParseExact(textBoxFechaNaci.Text, formatoFecha, culture, DateTimeStyles.None, out fechaNacimientoValida))
+            // Tomar la fecha directamente del calendario
+            DateTime fechaNacimientoValida = dtpNacimiento.Value;
+
+            // Validación simple: no permitir fechas futuras
+            if (fechaNacimientoValida > DateTime.Today)
             {
-                MessageBox.Show($"Por favor, ingrese la Fecha de Nacimiento exactamente en el formato: {formatoFecha}", "Error de Formato", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBoxFechaNaci.Focus(); return;
+                MessageBox.Show("La fecha de nacimiento no puede ser futura.",
+                    "Fecha inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
+
 
             // Edad: si no teclean, la calculo; si teclean, valido número
             int edadEntera = (int)Math.Floor((DateTime.Today - fechaNacimientoValida).TotalDays / 365.2425);
@@ -263,5 +268,33 @@ namespace MapaTest
             var mapa = new FormMapa();
             mapa.Show();
         }
+
+        private void labelEdad_Click(object sender, EventArgs e)
+        {
+
+        }
+        private static int CalcularEdad(DateTime nacimiento)
+        {
+            DateTime hoy = DateTime.Today;
+            int edad = hoy.Year - nacimiento.Year;
+            if (nacimiento.Date > hoy.AddYears(-edad)) edad--;
+            return Math.Max(0, edad);
+        }
+
+        private void dtpNacimiento_ValueChanged(object sender, EventArgs e)
+        {
+            textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value).ToString();
+        }
+
+        private void FormRegistro_Load(object sender, EventArgs e)
+        {
+            // Limitar fechas válidas
+            dtpNacimiento.MaxDate = DateTime.Today;
+            dtpNacimiento.MinDate = new DateTime(1900, 1, 1);
+
+            // Calcular edad al abrir (útil al editar registros)
+            textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value).ToString();
+        }
+
     }
 }
