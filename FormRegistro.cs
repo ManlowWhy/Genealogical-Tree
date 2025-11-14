@@ -1,21 +1,50 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Windows.Forms;
-
 
 namespace MapaTest
 {
+    public enum TipoRelacion
+    {
+        Libre,
+        Hijo,
+        Padre,
+        Hermano
+    }
+
     public partial class FormRegistro : Form
     {
+        public Persona PersonaCreada { get; private set; }
+        public bool CloseOnSave { get; set; } = false;
+
+        public Persona PersonaReferencia { get; private set; }
+        public TipoRelacion TipoRelacionActual { get; private set; } = TipoRelacion.Libre;
+
         public FormRegistro()
         {
             InitializeComponent();
             panelArbol.Paint += panelArbol_Paint;
         }
+
+        // Constructor con lat/lng, ahora sin imponer parentezco
+        public FormRegistro(double lat, double lng,
+                    TipoRelacion tipoRelacion = TipoRelacion.Libre,
+                    Persona personaReferencia = null) : this()
+        {
+            textBoxLatitud.Text = lat.ToString(CultureInfo.InvariantCulture);
+            textBoxLongitud.Text = lng.ToString(CultureInfo.InvariantCulture);
+            CloseOnSave = true;
+
+            TipoRelacionActual = tipoRelacion;
+            PersonaReferencia = personaReferencia;
+            // Ya NO tocamos comboBoxParentezco: las personas se crean sin parentezco obligatorio.
+        }
+
+        // ===================== Árbol (igual que antes) =====================
 
         private List<string> ObtenerPadresSegunParentezco(string parentezco)
         {
@@ -33,39 +62,36 @@ namespace MapaTest
             }
         }
 
-
         private void ReconectarGrafo()
         {
             foreach (var nodo in GrafoFamiliar.Nodos.Values)
-            {
                 nodo.Hijos.Clear();
-            }
 
             foreach (var posibleHijo in GrafoFamiliar.Nodos.Values)
             {
                 var padresEsperados = ObtenerPadresSegunParentezco(posibleHijo.Parentezco);
-
                 foreach (var parentezcoPadre in padresEsperados)
                 {
                     if (GrafoFamiliar.Nodos.ContainsKey(parentezcoPadre))
                     {
                         var padreNodo = GrafoFamiliar.Nodos[parentezcoPadre];
                         if (!padreNodo.Hijos.Contains(posibleHijo))
-                        {
                             padreNodo.Hijos.Add(posibleHijo);
-                        }
                     }
                 }
             }
         }
 
-
-
-
         private void DibujarArbol()
         {
-            ReconectarGrafo(); 
             panelArbol.Invalidate();
+        }
+
+        private class NodoVista
+        {
+            public Persona Persona { get; set; }
+            public List<NodoVista> Hijos { get; } = new List<NodoVista>();
+            public int Nivel { get; set; } = 0;
         }
 
         private int ObtenerNivelGeneracional(string parentezco)
@@ -93,112 +119,208 @@ namespace MapaTest
             var g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-            int nivelY = 30;
-            int espacioX = 150;
-            int nodoAncho = 120;
-            int nodoAlto = 50;
+            // 1) Todas las personas que existen
+            var personas = DatosGlobales.Familia.ToList();
+            if (personas.Count == 0) return;
 
-            var niveles = new Dictionary<int, List<NodoFamiliar>>();
-            var posiciones = new Dictionary<NodoFamiliar, Point>();
-
-            // Agrupar nodos por generación
-            foreach (var nodo in GrafoFamiliar.Nodos.Values)
+            // 2) Crear un NodoVista por cada persona (clave = cédula)
+            var nodos = new Dictionary<string, NodoVista>();
+            foreach (var p in personas)
             {
-                int nivel = ObtenerNivelGeneracional(nodo.Parentezco);
-                if (!niveles.ContainsKey(nivel))
-                    niveles[nivel] = new List<NodoFamiliar>();
-                niveles[nivel].Add(nodo);
+                if (!string.IsNullOrWhiteSpace(p.Cedula) && !nodos.ContainsKey(p.Cedula))
+                {
+                    nodos[p.Cedula] = new NodoVista { Persona = p };
+                }
+            }
+            if (nodos.Count == 0) return;
+
+            // 3) Armar padre–hijo usando tus relaciones hechas “a mano”
+            var padresCount = new Dictionary<string, int>();
+            foreach (var ced in nodos.Keys)
+                padresCount[ced] = 0;
+
+            foreach (var rel in RelacionesFamilia.Relaciones)
+            {
+                if (!nodos.ContainsKey(rel.CedulaPadre) || !nodos.ContainsKey(rel.CedulaHijo))
+                    continue;
+
+                var padre = nodos[rel.CedulaPadre];
+                var hijo = nodos[rel.CedulaHijo];
+
+                if (!padre.Hijos.Contains(hijo))
+                    padre.Hijos.Add(hijo);
+
+                padresCount[rel.CedulaHijo]++;
             }
 
-            foreach (var nivel in niveles.Keys.OrderBy(k => k))
-            {
-                int y = nivelY + nivel * 100;
-                int x = 30;
+            // 4) Calcular nivel generacional (0 = sin padres, 1 = hijos de esos, etc.)
+            var visitados = new HashSet<string>();
+            var cola = new Queue<NodoVista>();
 
-                foreach (var nodo in niveles[nivel])
+            // raíces = personas sin padres
+            var raices = nodos.Values
+                .Where(n => padresCount.TryGetValue(n.Persona.Cedula, out int c) ? c == 0 : true)
+                .ToList();
+
+            foreach (var r in raices)
+            {
+                r.Nivel = 0;
+                cola.Enqueue(r);
+                visitados.Add(r.Persona.Cedula);
+            }
+
+            while (cola.Count > 0)
+            {
+                var actual = cola.Dequeue();
+                foreach (var hijo in actual.Hijos)
+                {
+                    int nuevoNivel = actual.Nivel + 1;
+                    if (!visitados.Contains(hijo.Persona.Cedula) || nuevoNivel > hijo.Nivel)
+                    {
+                        hijo.Nivel = nuevoNivel;
+                    }
+
+                    if (!visitados.Contains(hijo.Persona.Cedula))
+                    {
+                        visitados.Add(hijo.Persona.Cedula);
+                        cola.Enqueue(hijo);
+                    }
+                }
+            }
+
+            // Personas sin relaciones (ni padres ni hijos) → nivel 0
+            foreach (var n in nodos.Values)
+            {
+                if (!visitados.Contains(n.Persona.Cedula))
+                    n.Nivel = 0;
+            }
+
+            // 5) Layout: agrupar por nivel y dibujar nodos
+            int nodoAncho = 160;
+            int nodoAlto = 60;
+            int margenX = 20;
+            int margenY = 20;
+            int espacioX = 30;
+            int espacioY = 60;
+
+            var niveles = nodos.Values
+                .GroupBy(n => n.Nivel)
+                .OrderBy(gp => gp.Key);
+
+            var rectPorCedula = new Dictionary<string, Rectangle>();
+
+            foreach (var grupo in niveles)
+            {
+                int nivel = grupo.Key;
+                int y = margenY + nivel * (nodoAlto + espacioY);
+                int x = margenX;
+
+                foreach (var nodo in grupo)
                 {
                     var rect = new Rectangle(x, y, nodoAncho, nodoAlto);
                     g.FillRectangle(Brushes.LightBlue, rect);
                     g.DrawRectangle(Pens.Black, rect);
-                    g.DrawString($"{nodo.Parentezco}\n{nodo.Nombre}\n({nodo.Latitud}, {nodo.Longitud})", this.Font, Brushes.Black, x + 5, y + 5);
 
-                    posiciones[nodo] = new Point(x + nodoAncho / 2, y);
-                    x += espacioX;
+                    string texto = nodo.Persona.Nombre;
+                    if (!string.IsNullOrWhiteSpace(nodo.Persona.Parentezco))
+                        texto += $"\n{nodo.Persona.Parentezco}";
+                    texto += $"\n({nodo.Persona.Latitud:F4}, {nodo.Persona.Longitud:F4})";
+
+                    g.DrawString(texto, this.Font, Brushes.Black, rect.X + 4, rect.Y + 4);
+
+                    rectPorCedula[nodo.Persona.Cedula] = rect;
+                    x += nodoAncho + espacioX;
                 }
             }
 
-            using (var redPen = new Pen(Color.Black, 2))
+            // 6) Dibujar líneas padre–hijo
+            using (var pen = new Pen(Color.Black, 2))
             {
-                foreach (var padre in GrafoFamiliar.Nodos.Values)
+                foreach (var rel in RelacionesFamilia.Relaciones)
                 {
-                    foreach (var hijo in padre.Hijos)
-                    {
-                        if (posiciones.ContainsKey(padre) && posiciones.ContainsKey(hijo))
-                        {
-                            var p1 = posiciones[padre];
-                            var p2 = posiciones[hijo];
-                            g.DrawLine(redPen, p1.X, p1.Y + nodoAlto, p2.X, p2.Y);
-                        }
-                    }
+                    if (!rectPorCedula.ContainsKey(rel.CedulaPadre) ||
+                        !rectPorCedula.ContainsKey(rel.CedulaHijo))
+                        continue;
+
+                    var rectPadre = rectPorCedula[rel.CedulaPadre];
+                    var rectHijo = rectPorCedula[rel.CedulaHijo];
+
+                    var p1 = new Point(rectPadre.X + rectPadre.Width / 2, rectPadre.Bottom);
+                    var p2 = new Point(rectHijo.X + rectHijo.Width / 2, rectHijo.Top);
+
+                    g.DrawLine(pen, p1, p2);
                 }
             }
         }
 
-
-
         private void buttonAgregarFamiliar_Click(object sender, EventArgs e)
         {
-
-            const string formatoFecha = "dd/MM/yyyy";
             var culture = CultureInfo.InvariantCulture;
 
-            DateTime fechaNacimientoValida;
-            if (!DateTime.TryParseExact(
-                textBoxFechaNaci.Text,
-                formatoFecha,
-                culture,
-                DateTimeStyles.None,
-                out fechaNacimientoValida))
+            // === Validaciones de entrada ===
+            if (string.IsNullOrWhiteSpace(textBoxNombre.Text))
             {
-                MessageBox.Show($"Por favor, ingrese la Fecha de Nacimiento exactamente en el formato: {formatoFecha}", "Error de Formato", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBoxFechaNaci.Focus();
-                return; // Detiene la ejecución
+                MessageBox.Show("Ingrese el Nombre.", "Dato requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxNombre.Focus(); return;
             }
-
-            double edadValida;
-            if (!double.TryParse(textBoxEdad.Text, System.Globalization.NumberStyles.Any, culture, out edadValida))
+            if (string.IsNullOrWhiteSpace(textBoxCedula.Text))
             {
-                MessageBox.Show("Por favor, ingrese la Edad como un número válido.", "Error de Entrada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBoxEdad.Focus();
+                MessageBox.Show("Ingrese la Cédula.", "Dato requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxCedula.Focus(); return;
+            }
+            // ⚠️ AHORA NO OBLIGAMOS A ELEGIR PARENTEZCO
+            // if (string.IsNullOrWhiteSpace(comboBoxParentezco.Text)) ...
+
+            DateTime fechaNacimientoValida = dtpNacimiento.Value;
+            if (fechaNacimientoValida > DateTime.Today)
+            {
+                MessageBox.Show("La fecha de nacimiento no puede ser futura.",
+                    "Fecha inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            double latitudValida;
-            if (!double.TryParse(textBoxLatitud.Text, System.Globalization.NumberStyles.Any, culture, out latitudValida))
+            int edadEntera = (int)Math.Floor((DateTime.Today - fechaNacimientoValida).TotalDays / 365.2425);
+            if (!string.IsNullOrWhiteSpace(textBoxEdad.Text))
             {
-                MessageBox.Show("Ingrese una Latitud válida (use el punto '.' como separador decimal).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBoxLatitud.Focus();
-                return;
+                if (!double.TryParse(textBoxEdad.Text, NumberStyles.Any, culture, out double edadValida))
+                {
+                    MessageBox.Show("Por favor, ingrese la Edad como un número válido.", "Error de Entrada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    textBoxEdad.Focus(); return;
+                }
+                edadEntera = (int)Math.Round(edadValida);
             }
 
-            double longitudValida;
-            if (!double.TryParse(textBoxLongitud.Text, System.Globalization.NumberStyles.Any, culture, out longitudValida))
+            if (!double.TryParse(textBoxLatitud.Text, NumberStyles.Any, culture, out double latitudValida) ||
+                latitudValida < -90 || latitudValida > 90)
             {
-                MessageBox.Show("Ingrese una Longitud válida (use el punto '.' como separador decimal).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBoxLongitud.Focus();
-                return;
+                MessageBox.Show("Ingrese una Latitud válida en [-90, 90] (use '.' como separador decimal).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxLatitud.Focus(); return;
+            }
+
+            if (!double.TryParse(textBoxLongitud.Text, NumberStyles.Any, culture, out double longitudValida) ||
+                longitudValida < -180 || longitudValida > 180)
+            {
+                MessageBox.Show("Ingrese una Longitud válida en [-180, 180] (use '.' como separador decimal).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxLongitud.Focus(); return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(textBoxRutaFoto.Text) && !File.Exists(textBoxRutaFoto.Text))
+            {
+                var r = MessageBox.Show("La ruta de la foto no existe. ¿Desea continuar sin foto?", "Advertencia",
+                                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (r == DialogResult.No) { textBoxRutaFoto.Focus(); return; }
             }
 
             var persona = new Persona
             {
-                Nombre = textBoxNombre.Text,
-                Cedula = textBoxCedula.Text,
+                Nombre = textBoxNombre.Text.Trim(),
+                Cedula = textBoxCedula.Text.Trim(),
                 FechaNacimiento = fechaNacimientoValida.ToString("yyyy-MM-dd"),
-                Edad = edadValida.ToString("F0"),
-                Parentezco = comboBoxParentezco.Text,
+                Edad = edadEntera.ToString("F0", culture),
+                Parentezco = comboBoxParentezco.Text,  // puede estar vacío
                 Latitud = latitudValida,
                 Longitud = longitudValida,
-                RutaFoto = textBoxRutaFoto.Text
+                RutaFoto = textBoxRutaFoto.Text.Trim()
             };
 
             var nodo = new NodoFamiliar
@@ -209,31 +331,80 @@ namespace MapaTest
                 Longitud = persona.Longitud
             };
 
-            // Determinar el padre según el parentezco
             List<string> padres = ObtenerPadresSegunParentezco(persona.Parentezco);
 
-
-            // Agregar al grafo
             GrafoFamiliar.AgregarNodo(nodo);
+            DatosGlobales.Familia.Add(persona);
 
             DibujarArbol();
 
-            DatosGlobales.Familia.Add(persona);
+            PersonaCreada = persona;
+
+            if (CloseOnSave || this.Modal)
+            {
+                DialogResult = DialogResult.OK;
+                return;
+            }
 
             MessageBox.Show("Familiar agregado correctamente.");
         }
 
         private void buttonVerMapa_Click(object sender, EventArgs e)
         {
-            if (DatosGlobales.Familia.Count == 0)
-            {
-                MessageBox.Show("Agrega al menos un familiar antes de ver el mapa.");
-                return;
-            }
-
             var mapa = new FormMapa();
             mapa.Show();
         }
+
+        private void labelEdad_Click(object sender, EventArgs e) { }
+
+        private static int CalcularEdad(DateTime nacimiento)
+        {
+            DateTime hoy = DateTime.Today;
+            int edad = hoy.Year - nacimiento.Year;
+            if (nacimiento.Date > hoy.AddYears(-edad)) edad--;
+            return Math.Max(0, edad);
+        }
+
+        private void dtpNacimiento_ValueChanged(object sender, EventArgs e)
+        {
+            textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value).ToString();
+        }
+
+        private void FormRegistro_Load(object sender, EventArgs e)
+        {
+            dtpNacimiento.MaxDate = DateTime.Today;
+            dtpNacimiento.MinDate = new DateTime(1900, 1, 1);
+            textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value).ToString();
+        }
+
+        private void groupBoxUbicacion_Enter(object sender, EventArgs e) { }
+        private void groupBoxDatosPersona_Enter(object sender, EventArgs e) { }
+        private void button1_Click(object sender, EventArgs e) { }
+
+        public void CargarParaEdicion(Persona p)
+        {
+            if (p == null) return;
+
+            textBoxNombre.Text = p.Nombre;
+            textBoxCedula.Text = p.Cedula;
+
+            if (DateTime.TryParse(p.FechaNacimiento, out var fecha))
+            {
+                dtpNacimiento.Value = fecha;
+            }
+
+            textBoxEdad.Text = p.Edad;
+            comboBoxParentezco.Text = p.Parentezco;
+
+            textBoxLatitud.Text = p.Latitud.ToString(CultureInfo.InvariantCulture);
+            textBoxLongitud.Text = p.Longitud.ToString(CultureInfo.InvariantCulture);
+
+            textBoxRutaFoto.Text = p.RutaFoto ?? string.Empty;
+        }
+
+        private void labelFoto_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
-

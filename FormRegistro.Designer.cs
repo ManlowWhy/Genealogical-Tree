@@ -30,6 +30,8 @@
         {
             this.labelNombre = new System.Windows.Forms.Label();
             this.groupBoxDatosPersona = new System.Windows.Forms.GroupBox();
+            this.buttonAgregarFamiliar = new System.Windows.Forms.Button();
+            this.dtpNacimiento = new System.Windows.Forms.DateTimePicker();
             this.buttonVerMapa = new System.Windows.Forms.Button();
             this.textBoxRutaFoto = new System.Windows.Forms.TextBox();
             this.labelFoto = new System.Windows.Forms.Label();
@@ -38,64 +40,79 @@
             this.textBoxLatitud = new System.Windows.Forms.TextBox();
             this.labelLongitud = new System.Windows.Forms.Label();
             this.labelLatitud = new System.Windows.Forms.Label();
-            this.buttonAgregarFamiliar = new System.Windows.Forms.Button();
-            this.groupBoxParentezco = new System.Windows.Forms.GroupBox();
-            this.comboBoxParentezco = new System.Windows.Forms.ComboBox();
             this.textBoxEdad = new System.Windows.Forms.TextBox();
             this.textBoxCedula = new System.Windows.Forms.TextBox();
             this.textBoxNombre = new System.Windows.Forms.TextBox();
-            this.textBoxFechaNaci = new System.Windows.Forms.TextBox();
             this.labelCedula = new System.Windows.Forms.Label();
             this.labelFechaNaci = new System.Windows.Forms.Label();
             this.labelEdad = new System.Windows.Forms.Label();
             this.groupBoxArbol = new System.Windows.Forms.GroupBox();
             this.panelArbol = new System.Windows.Forms.Panel();
+            this.comboBoxParentezco = new System.Windows.Forms.ComboBox();
             this.groupBoxDatosPersona.SuspendLayout();
             this.groupBoxUbicacion.SuspendLayout();
-            this.groupBoxParentezco.SuspendLayout();
             this.groupBoxArbol.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelNombre
             // 
             this.labelNombre.AutoSize = true;
-            this.labelNombre.Location = new System.Drawing.Point(26, 69);
-            this.labelNombre.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelNombre.Location = new System.Drawing.Point(17, 25);
             this.labelNombre.Name = "labelNombre";
-            this.labelNombre.Size = new System.Drawing.Size(69, 20);
+            this.labelNombre.Size = new System.Drawing.Size(47, 13);
             this.labelNombre.TabIndex = 0;
             this.labelNombre.Text = "Nombre:";
             // 
             // groupBoxDatosPersona
             // 
+            this.groupBoxDatosPersona.Controls.Add(this.comboBoxParentezco);
+            this.groupBoxDatosPersona.Controls.Add(this.buttonAgregarFamiliar);
+            this.groupBoxDatosPersona.Controls.Add(this.dtpNacimiento);
             this.groupBoxDatosPersona.Controls.Add(this.buttonVerMapa);
             this.groupBoxDatosPersona.Controls.Add(this.textBoxRutaFoto);
             this.groupBoxDatosPersona.Controls.Add(this.labelFoto);
             this.groupBoxDatosPersona.Controls.Add(this.groupBoxUbicacion);
-            this.groupBoxDatosPersona.Controls.Add(this.buttonAgregarFamiliar);
-            this.groupBoxDatosPersona.Controls.Add(this.groupBoxParentezco);
             this.groupBoxDatosPersona.Controls.Add(this.textBoxEdad);
             this.groupBoxDatosPersona.Controls.Add(this.textBoxCedula);
             this.groupBoxDatosPersona.Controls.Add(this.textBoxNombre);
-            this.groupBoxDatosPersona.Controls.Add(this.textBoxFechaNaci);
             this.groupBoxDatosPersona.Controls.Add(this.labelCedula);
             this.groupBoxDatosPersona.Controls.Add(this.labelNombre);
             this.groupBoxDatosPersona.Controls.Add(this.labelFechaNaci);
             this.groupBoxDatosPersona.Controls.Add(this.labelEdad);
-            this.groupBoxDatosPersona.Location = new System.Drawing.Point(18, 18);
-            this.groupBoxDatosPersona.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBoxDatosPersona.Location = new System.Drawing.Point(12, 12);
             this.groupBoxDatosPersona.Name = "groupBoxDatosPersona";
-            this.groupBoxDatosPersona.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBoxDatosPersona.Size = new System.Drawing.Size(480, 866);
+            this.groupBoxDatosPersona.Size = new System.Drawing.Size(324, 563);
             this.groupBoxDatosPersona.TabIndex = 1;
             this.groupBoxDatosPersona.TabStop = false;
             this.groupBoxDatosPersona.Text = "Datos personales";
+            this.groupBoxDatosPersona.Enter += new System.EventHandler(this.groupBoxDatosPersona_Enter);
+            // 
+            // buttonAgregarFamiliar
+            // 
+            this.buttonAgregarFamiliar.Location = new System.Drawing.Point(98, 430);
+            this.buttonAgregarFamiliar.Name = "buttonAgregarFamiliar";
+            this.buttonAgregarFamiliar.Size = new System.Drawing.Size(120, 23);
+            this.buttonAgregarFamiliar.TabIndex = 14;
+            this.buttonAgregarFamiliar.Text = "Agregar familiar";
+            this.buttonAgregarFamiliar.UseVisualStyleBackColor = true;
+            this.buttonAgregarFamiliar.Click += new System.EventHandler(this.buttonAgregarFamiliar_Click);
+            // 
+            // dtpNacimiento
+            // 
+            this.dtpNacimiento.CustomFormat = "dd/MM/yyyy";
+            this.dtpNacimiento.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpNacimiento.Location = new System.Drawing.Point(132, 104);
+            this.dtpNacimiento.Name = "dtpNacimiento";
+            this.dtpNacimiento.Size = new System.Drawing.Size(172, 20);
+            this.dtpNacimiento.TabIndex = 19;
+            this.dtpNacimiento.ValueChanged += new System.EventHandler(this.dtpNacimiento_ValueChanged);
             // 
             // buttonVerMapa
             // 
-            this.buttonVerMapa.Location = new System.Drawing.Point(256, 787);
+            this.buttonVerMapa.Location = new System.Drawing.Point(171, 512);
+            this.buttonVerMapa.Margin = new System.Windows.Forms.Padding(2);
             this.buttonVerMapa.Name = "buttonVerMapa";
-            this.buttonVerMapa.Size = new System.Drawing.Size(186, 35);
+            this.buttonVerMapa.Size = new System.Drawing.Size(124, 23);
             this.buttonVerMapa.TabIndex = 18;
             this.buttonVerMapa.Text = "Ver mapa";
             this.buttonVerMapa.UseVisualStyleBackColor = true;
@@ -103,19 +120,17 @@
             // 
             // textBoxRutaFoto
             // 
-            this.textBoxRutaFoto.Location = new System.Drawing.Point(9, 698);
-            this.textBoxRutaFoto.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxRutaFoto.Location = new System.Drawing.Point(12, 389);
             this.textBoxRutaFoto.Name = "textBoxRutaFoto";
-            this.textBoxRutaFoto.Size = new System.Drawing.Size(451, 26);
+            this.textBoxRutaFoto.Size = new System.Drawing.Size(302, 20);
             this.textBoxRutaFoto.TabIndex = 17;
             // 
             // labelFoto
             // 
             this.labelFoto.AutoSize = true;
-            this.labelFoto.Location = new System.Drawing.Point(174, 674);
-            this.labelFoto.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelFoto.Location = new System.Drawing.Point(117, 373);
             this.labelFoto.Name = "labelFoto";
-            this.labelFoto.Size = new System.Drawing.Size(102, 20);
+            this.labelFoto.Size = new System.Drawing.Size(69, 13);
             this.labelFoto.TabIndex = 16;
             this.labelFoto.Text = "Ruta de foto:";
             // 
@@ -125,163 +140,102 @@
             this.groupBoxUbicacion.Controls.Add(this.textBoxLatitud);
             this.groupBoxUbicacion.Controls.Add(this.labelLongitud);
             this.groupBoxUbicacion.Controls.Add(this.labelLatitud);
-            this.groupBoxUbicacion.Location = new System.Drawing.Point(18, 342);
-            this.groupBoxUbicacion.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBoxUbicacion.Location = new System.Drawing.Point(12, 173);
             this.groupBoxUbicacion.Name = "groupBoxUbicacion";
-            this.groupBoxUbicacion.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBoxUbicacion.Size = new System.Drawing.Size(426, 171);
+            this.groupBoxUbicacion.Size = new System.Drawing.Size(284, 110);
             this.groupBoxUbicacion.TabIndex = 15;
             this.groupBoxUbicacion.TabStop = false;
             this.groupBoxUbicacion.Text = "Ubicación";
+            this.groupBoxUbicacion.Enter += new System.EventHandler(this.groupBoxUbicacion_Enter);
             // 
             // textBoxLongitud
             // 
-            this.textBoxLongitud.Location = new System.Drawing.Point(100, 108);
-            this.textBoxLongitud.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxLongitud.Location = new System.Drawing.Point(67, 70);
             this.textBoxLongitud.Name = "textBoxLongitud";
-            this.textBoxLongitud.Size = new System.Drawing.Size(306, 26);
+            this.textBoxLongitud.Size = new System.Drawing.Size(205, 20);
             this.textBoxLongitud.TabIndex = 3;
             // 
             // textBoxLatitud
             // 
-            this.textBoxLatitud.Location = new System.Drawing.Point(100, 45);
-            this.textBoxLatitud.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxLatitud.Location = new System.Drawing.Point(67, 29);
             this.textBoxLatitud.Name = "textBoxLatitud";
-            this.textBoxLatitud.Size = new System.Drawing.Size(306, 26);
+            this.textBoxLatitud.Size = new System.Drawing.Size(205, 20);
             this.textBoxLatitud.TabIndex = 2;
             // 
             // labelLongitud
             // 
             this.labelLongitud.AutoSize = true;
-            this.labelLongitud.Location = new System.Drawing.Point(15, 112);
-            this.labelLongitud.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelLongitud.Location = new System.Drawing.Point(10, 73);
             this.labelLongitud.Name = "labelLongitud";
-            this.labelLongitud.Size = new System.Drawing.Size(75, 20);
+            this.labelLongitud.Size = new System.Drawing.Size(51, 13);
             this.labelLongitud.TabIndex = 1;
             this.labelLongitud.Text = "Longitud:";
             // 
             // labelLatitud
             // 
             this.labelLatitud.AutoSize = true;
-            this.labelLatitud.Location = new System.Drawing.Point(15, 55);
-            this.labelLatitud.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelLatitud.Location = new System.Drawing.Point(10, 36);
             this.labelLatitud.Name = "labelLatitud";
-            this.labelLatitud.Size = new System.Drawing.Size(62, 20);
+            this.labelLatitud.Size = new System.Drawing.Size(42, 13);
             this.labelLatitud.TabIndex = 0;
             this.labelLatitud.Text = "Latitud:";
             // 
-            // buttonAgregarFamiliar
-            // 
-            this.buttonAgregarFamiliar.Location = new System.Drawing.Point(30, 787);
-            this.buttonAgregarFamiliar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.buttonAgregarFamiliar.Name = "buttonAgregarFamiliar";
-            this.buttonAgregarFamiliar.Size = new System.Drawing.Size(180, 35);
-            this.buttonAgregarFamiliar.TabIndex = 14;
-            this.buttonAgregarFamiliar.Text = "Agregar familiar";
-            this.buttonAgregarFamiliar.UseVisualStyleBackColor = true;
-            this.buttonAgregarFamiliar.Click += new System.EventHandler(this.buttonAgregarFamiliar_Click);
-            // 
-            // groupBoxParentezco
-            // 
-            this.groupBoxParentezco.Controls.Add(this.comboBoxParentezco);
-            this.groupBoxParentezco.Location = new System.Drawing.Point(18, 538);
-            this.groupBoxParentezco.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBoxParentezco.Name = "groupBoxParentezco";
-            this.groupBoxParentezco.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBoxParentezco.Size = new System.Drawing.Size(426, 108);
-            this.groupBoxParentezco.TabIndex = 13;
-            this.groupBoxParentezco.TabStop = false;
-            this.groupBoxParentezco.Text = "Parentezco:";
-            // 
-            // comboBoxParentezco
-            // 
-            this.comboBoxParentezco.FormattingEnabled = true;
-            this.comboBoxParentezco.Items.AddRange(new object[] {
-            "Abuela Materna",
-            "Abuelo Materno",
-            "Abuela Paterna",
-            "Abuelo Paterno",
-            "Madre",
-            "Padre",
-            "Hija",
-            "Hijo"});
-            this.comboBoxParentezco.Location = new System.Drawing.Point(108, 45);
-            this.comboBoxParentezco.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.comboBoxParentezco.Name = "comboBoxParentezco";
-            this.comboBoxParentezco.Size = new System.Drawing.Size(298, 28);
-            this.comboBoxParentezco.TabIndex = 0;
-            // 
             // textBoxEdad
             // 
-            this.textBoxEdad.Location = new System.Drawing.Point(135, 265);
-            this.textBoxEdad.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxEdad.Location = new System.Drawing.Point(98, 133);
             this.textBoxEdad.Name = "textBoxEdad";
-            this.textBoxEdad.Size = new System.Drawing.Size(307, 26);
+            this.textBoxEdad.ReadOnly = true;
+            this.textBoxEdad.Size = new System.Drawing.Size(206, 20);
             this.textBoxEdad.TabIndex = 10;
             // 
             // textBoxCedula
             // 
-            this.textBoxCedula.Location = new System.Drawing.Point(130, 135);
-            this.textBoxCedula.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxCedula.Location = new System.Drawing.Point(87, 59);
             this.textBoxCedula.Name = "textBoxCedula";
-            this.textBoxCedula.Size = new System.Drawing.Size(312, 26);
+            this.textBoxCedula.Size = new System.Drawing.Size(209, 20);
             this.textBoxCedula.TabIndex = 7;
             // 
             // textBoxNombre
             // 
-            this.textBoxNombre.Location = new System.Drawing.Point(130, 65);
-            this.textBoxNombre.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxNombre.Location = new System.Drawing.Point(87, 22);
             this.textBoxNombre.Name = "textBoxNombre";
-            this.textBoxNombre.Size = new System.Drawing.Size(312, 26);
+            this.textBoxNombre.Size = new System.Drawing.Size(209, 20);
             this.textBoxNombre.TabIndex = 6;
-            // 
-            // textBoxFechaNaci
-            // 
-            this.textBoxFechaNaci.Location = new System.Drawing.Point(200, 194);
-            this.textBoxFechaNaci.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBoxFechaNaci.Name = "textBoxFechaNaci";
-            this.textBoxFechaNaci.Size = new System.Drawing.Size(242, 26);
-            this.textBoxFechaNaci.TabIndex = 9;
-            this.textBoxFechaNaci.Text = "DD/MM/AAAA";
             // 
             // labelCedula
             // 
             this.labelCedula.AutoSize = true;
-            this.labelCedula.Location = new System.Drawing.Point(26, 135);
-            this.labelCedula.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelCedula.Location = new System.Drawing.Point(17, 62);
             this.labelCedula.Name = "labelCedula";
-            this.labelCedula.Size = new System.Drawing.Size(63, 20);
+            this.labelCedula.Size = new System.Drawing.Size(43, 13);
             this.labelCedula.TabIndex = 1;
             this.labelCedula.Text = "Cédula:";
             // 
             // labelFechaNaci
             // 
             this.labelFechaNaci.AutoSize = true;
-            this.labelFechaNaci.Location = new System.Drawing.Point(26, 198);
-            this.labelFechaNaci.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelFechaNaci.Location = new System.Drawing.Point(17, 104);
             this.labelFechaNaci.Name = "labelFechaNaci";
-            this.labelFechaNaci.Size = new System.Drawing.Size(161, 20);
+            this.labelFechaNaci.Size = new System.Drawing.Size(109, 13);
             this.labelFechaNaci.TabIndex = 3;
             this.labelFechaNaci.Text = "Fecha de nacimiento:";
             // 
             // labelEdad
             // 
             this.labelEdad.AutoSize = true;
-            this.labelEdad.Location = new System.Drawing.Point(26, 269);
-            this.labelEdad.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelEdad.Location = new System.Drawing.Point(17, 136);
             this.labelEdad.Name = "labelEdad";
-            this.labelEdad.Size = new System.Drawing.Size(98, 20);
+            this.labelEdad.Size = new System.Drawing.Size(67, 13);
             this.labelEdad.TabIndex = 4;
             this.labelEdad.Text = "Edad actual:";
+            this.labelEdad.Click += new System.EventHandler(this.labelEdad_Click);
             // 
             // groupBoxArbol
             // 
             this.groupBoxArbol.Controls.Add(this.panelArbol);
-            this.groupBoxArbol.Location = new System.Drawing.Point(507, 18);
-            this.groupBoxArbol.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBoxArbol.Location = new System.Drawing.Point(338, 12);
             this.groupBoxArbol.Name = "groupBoxArbol";
-            this.groupBoxArbol.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBoxArbol.Size = new System.Drawing.Size(1018, 866);
+            this.groupBoxArbol.Size = new System.Drawing.Size(679, 563);
             this.groupBoxArbol.TabIndex = 17;
             this.groupBoxArbol.TabStop = false;
             this.groupBoxArbol.Text = "Arbol genealógico";
@@ -291,26 +245,34 @@
             this.panelArbol.AutoScroll = true;
             this.panelArbol.BackColor = System.Drawing.Color.White;
             this.panelArbol.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelArbol.Location = new System.Drawing.Point(4, 24);
+            this.panelArbol.Location = new System.Drawing.Point(3, 16);
+            this.panelArbol.Margin = new System.Windows.Forms.Padding(2);
             this.panelArbol.Name = "panelArbol";
-            this.panelArbol.Size = new System.Drawing.Size(1010, 837);
+            this.panelArbol.Size = new System.Drawing.Size(673, 544);
             this.panelArbol.TabIndex = 0;
+            // 
+            // comboBoxParentezco
+            // 
+            this.comboBoxParentezco.FormattingEnabled = true;
+            this.comboBoxParentezco.Location = new System.Drawing.Point(158, 520);
+            this.comboBoxParentezco.Name = "comboBoxParentezco";
+            this.comboBoxParentezco.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxParentezco.TabIndex = 20;
             // 
             // FormRegistro
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1544, 903);
+            this.ClientSize = new System.Drawing.Size(913, 487);
             this.Controls.Add(this.groupBoxArbol);
             this.Controls.Add(this.groupBoxDatosPersona);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormRegistro";
             this.Text = "Registro de datos";
+            this.Load += new System.EventHandler(this.FormRegistro_Load);
             this.groupBoxDatosPersona.ResumeLayout(false);
             this.groupBoxDatosPersona.PerformLayout();
             this.groupBoxUbicacion.ResumeLayout(false);
             this.groupBoxUbicacion.PerformLayout();
-            this.groupBoxParentezco.ResumeLayout(false);
             this.groupBoxArbol.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -324,13 +286,9 @@
         private System.Windows.Forms.Label labelEdad;
         private System.Windows.Forms.Label labelFechaNaci;
         private System.Windows.Forms.TextBox textBoxEdad;
-        private System.Windows.Forms.TextBox textBoxFechaNaci;
         private System.Windows.Forms.TextBox textBoxCedula;
         private System.Windows.Forms.TextBox textBoxNombre;
-        private System.Windows.Forms.GroupBox groupBoxParentezco;
-        private System.Windows.Forms.ComboBox comboBoxParentezco;
         private System.Windows.Forms.GroupBox groupBoxArbol;
-        private System.Windows.Forms.Button buttonAgregarFamiliar;
         private System.Windows.Forms.GroupBox groupBoxUbicacion;
         private System.Windows.Forms.TextBox textBoxLongitud;
         private System.Windows.Forms.TextBox textBoxLatitud;
@@ -340,5 +298,8 @@
         private System.Windows.Forms.Label labelFoto;
         private System.Windows.Forms.Button buttonVerMapa;
         private System.Windows.Forms.Panel panelArbol;
+        private System.Windows.Forms.DateTimePicker dtpNacimiento;
+        private System.Windows.Forms.Button buttonAgregarFamiliar;
+        private System.Windows.Forms.ComboBox comboBoxParentezco;
     }
 }
