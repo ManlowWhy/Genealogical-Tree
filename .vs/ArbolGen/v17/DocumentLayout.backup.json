@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|c:\\users\\gabri\\desktop\\genealogical-tree-main\\formregistro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|solutionrelative:formregistro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\formregistro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|solutionrelative:formregistro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|c:\\users\\gabri\\desktop\\genealogical-tree-main\\formregistro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|solutionrelative:formregistro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\formregistro.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -46,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -117,33 +117,34 @@
               "Title": "FormRegistro.Designer.cs",
               "DocumentMoniker": "C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\FormRegistro.Designer.cs",
               "RelativeDocumentMoniker": "FormRegistro.Designer.cs",
-              "ToolTip": "C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\FormRegistro.Designer.cs",
-              "RelativeToolTip": "FormRegistro.Designer.cs",
+              "ToolTip": "C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\FormRegistro.Designer.cs*",
+              "RelativeToolTip": "FormRegistro.Designer.cs*",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-06T07:55:41.031Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "FormRegistro.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\FormRegistro.cs",
-              "RelativeDocumentMoniker": "FormRegistro.cs",
-              "ToolTip": "C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\FormRegistro.cs [Design]",
-              "RelativeToolTip": "FormRegistro.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-06T07:52:05.174Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2025-11-06T07:55:41.031Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "FormRegistro.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\FormRegistro.cs",
+              "RelativeDocumentMoniker": "FormRegistro.cs",
+              "ToolTip": "C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\FormRegistro.cs [Dise\u00F1o]*",
+              "RelativeToolTip": "FormRegistro.cs [Dise\u00F1o]*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-06T07:52:05.174Z",
+              "EditorCaption": " [Dise\u00F1o]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "FormRegistro.cs",
               "DocumentMoniker": "C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\FormRegistro.cs",
               "RelativeDocumentMoniker": "FormRegistro.cs",
-              "ToolTip": "C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\FormRegistro.cs",
-              "RelativeToolTip": "FormRegistro.cs",
-              "ViewState": "AgIAAEMBAAAAAAAAAAAAwI4BAABTAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\gabri\\Desktop\\Genealogical-Tree-main\\FormRegistro.cs*",
+              "RelativeToolTip": "FormRegistro.cs*",
+              "ViewState": "AgIAAK8BAAAAAAAAAAAQwMMBAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-06T07:54:08.304Z",
               "EditorCaption": ""

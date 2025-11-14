@@ -221,12 +221,44 @@ namespace MapaTest
                     g.FillRectangle(Brushes.LightBlue, rect);
                     g.DrawRectangle(Pens.Black, rect);
 
+                    // Zona de imagen a la izquierda (cuadrito)
+                    int imgSize = nodoAlto - 10;
+                    var rectImg = new Rectangle(rect.X + 5, rect.Y + 5, imgSize, imgSize);
+
+                    // Dibujar imagen si existe
+                    if (!string.IsNullOrWhiteSpace(nodo.Persona.RutaFoto) &&
+                        File.Exists(nodo.Persona.RutaFoto))
+                    {
+                        try
+                        {
+                            using (var imgTemp = Image.FromFile(nodo.Persona.RutaFoto))
+                            using (var img = new Bitmap(imgTemp)) // clonar
+                            {
+                                g.DrawImage(img, rectImg);
+                            }
+                        }
+                        catch
+                        {
+                            // si falla la imagen, simplemente no se dibuja
+                        }
+                    }
+                    else
+                    {
+                        // Si no hay imagen, dibujamos un placeholder
+                        g.FillRectangle(Brushes.Gray, rectImg);
+                        g.DrawRectangle(Pens.Black, rectImg);
+                    }
+
+                    // Texto a la derecha de la imagen
+                    int textoX = rectImg.Right + 5;
+                    int textoY = rect.Y + 5;
+
                     string texto = nodo.Persona.Nombre;
                     if (!string.IsNullOrWhiteSpace(nodo.Persona.Parentezco))
                         texto += $"\n{nodo.Persona.Parentezco}";
                     texto += $"\n({nodo.Persona.Latitud:F4}, {nodo.Persona.Longitud:F4})";
 
-                    g.DrawString(texto, this.Font, Brushes.Black, rect.X + 4, rect.Y + 4);
+                    g.DrawString(texto, this.Font, Brushes.Black, textoX, textoY);
 
                     rectPorCedula[nodo.Persona.Cedula] = rect;
                     x += nodoAncho + espacioX;
@@ -405,6 +437,35 @@ namespace MapaTest
         private void labelFoto_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonBuscarFoto_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Seleccionar foto del familiar";
+                ofd.Filter = "Imágenes|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
+                ofd.Multiselect = false;
+
+                if (ofd.ShowDialog(this) == DialogResult.OK)
+                {
+                    textBoxRutaFoto.Text = ofd.FileName;
+
+                    try
+                    {
+                        using (var imgTemp = Image.FromFile(ofd.FileName))
+                        {
+                            pictureFoto.Image = new Bitmap(imgTemp);
+                        }
+                        pictureFoto.SizeMode = PictureBoxSizeMode.Zoom;
+                    }
+                    catch
+                    {
+                        MessageBox.Show("No se pudo cargar la imagen seleccionada.",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
     }
 }

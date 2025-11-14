@@ -30,6 +30,7 @@
         {
             this.labelNombre = new System.Windows.Forms.Label();
             this.groupBoxDatosPersona = new System.Windows.Forms.GroupBox();
+            this.comboBoxParentezco = new System.Windows.Forms.ComboBox();
             this.buttonAgregarFamiliar = new System.Windows.Forms.Button();
             this.dtpNacimiento = new System.Windows.Forms.DateTimePicker();
             this.buttonVerMapa = new System.Windows.Forms.Button();
@@ -48,10 +49,12 @@
             this.labelEdad = new System.Windows.Forms.Label();
             this.groupBoxArbol = new System.Windows.Forms.GroupBox();
             this.panelArbol = new System.Windows.Forms.Panel();
-            this.comboBoxParentezco = new System.Windows.Forms.ComboBox();
+            this.buttonBuscarFoto = new System.Windows.Forms.Button();
+            this.pictureFoto = new System.Windows.Forms.PictureBox();
             this.groupBoxDatosPersona.SuspendLayout();
             this.groupBoxUbicacion.SuspendLayout();
             this.groupBoxArbol.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureFoto)).BeginInit();
             this.SuspendLayout();
             // 
             // labelNombre
@@ -65,6 +68,8 @@
             // 
             // groupBoxDatosPersona
             // 
+            this.groupBoxDatosPersona.Controls.Add(this.pictureFoto);
+            this.groupBoxDatosPersona.Controls.Add(this.buttonBuscarFoto);
             this.groupBoxDatosPersona.Controls.Add(this.comboBoxParentezco);
             this.groupBoxDatosPersona.Controls.Add(this.buttonAgregarFamiliar);
             this.groupBoxDatosPersona.Controls.Add(this.dtpNacimiento);
@@ -86,6 +91,14 @@
             this.groupBoxDatosPersona.TabStop = false;
             this.groupBoxDatosPersona.Text = "Datos personales";
             this.groupBoxDatosPersona.Enter += new System.EventHandler(this.groupBoxDatosPersona_Enter);
+            // 
+            // comboBoxParentezco
+            // 
+            this.comboBoxParentezco.FormattingEnabled = true;
+            this.comboBoxParentezco.Location = new System.Drawing.Point(158, 520);
+            this.comboBoxParentezco.Name = "comboBoxParentezco";
+            this.comboBoxParentezco.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxParentezco.TabIndex = 20;
             // 
             // buttonAgregarFamiliar
             // 
@@ -120,7 +133,7 @@
             // 
             // textBoxRutaFoto
             // 
-            this.textBoxRutaFoto.Location = new System.Drawing.Point(12, 389);
+            this.textBoxRutaFoto.Location = new System.Drawing.Point(6, 326);
             this.textBoxRutaFoto.Name = "textBoxRutaFoto";
             this.textBoxRutaFoto.Size = new System.Drawing.Size(302, 20);
             this.textBoxRutaFoto.TabIndex = 17;
@@ -128,7 +141,7 @@
             // labelFoto
             // 
             this.labelFoto.AutoSize = true;
-            this.labelFoto.Location = new System.Drawing.Point(117, 373);
+            this.labelFoto.Location = new System.Drawing.Point(118, 310);
             this.labelFoto.Name = "labelFoto";
             this.labelFoto.Size = new System.Drawing.Size(69, 13);
             this.labelFoto.TabIndex = 16;
@@ -251,13 +264,23 @@
             this.panelArbol.Size = new System.Drawing.Size(673, 544);
             this.panelArbol.TabIndex = 0;
             // 
-            // comboBoxParentezco
+            // buttonBuscarFoto
             // 
-            this.comboBoxParentezco.FormattingEnabled = true;
-            this.comboBoxParentezco.Location = new System.Drawing.Point(158, 520);
-            this.comboBoxParentezco.Name = "comboBoxParentezco";
-            this.comboBoxParentezco.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxParentezco.TabIndex = 20;
+            this.buttonBuscarFoto.Location = new System.Drawing.Point(25, 365);
+            this.buttonBuscarFoto.Name = "buttonBuscarFoto";
+            this.buttonBuscarFoto.Size = new System.Drawing.Size(75, 23);
+            this.buttonBuscarFoto.TabIndex = 21;
+            this.buttonBuscarFoto.Text = "Buscar Foto";
+            this.buttonBuscarFoto.UseVisualStyleBackColor = true;
+            this.buttonBuscarFoto.Click += new System.EventHandler(this.buttonBuscarFoto_Click);
+            // 
+            // pictureFoto
+            // 
+            this.pictureFoto.Location = new System.Drawing.Point(118, 352);
+            this.pictureFoto.Name = "pictureFoto";
+            this.pictureFoto.Size = new System.Drawing.Size(100, 59);
+            this.pictureFoto.TabIndex = 22;
+            this.pictureFoto.TabStop = false;
             // 
             // FormRegistro
             // 
@@ -274,6 +297,7 @@
             this.groupBoxUbicacion.ResumeLayout(false);
             this.groupBoxUbicacion.PerformLayout();
             this.groupBoxArbol.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureFoto)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -301,5 +325,7 @@
         private System.Windows.Forms.DateTimePicker dtpNacimiento;
         private System.Windows.Forms.Button buttonAgregarFamiliar;
         private System.Windows.Forms.ComboBox comboBoxParentezco;
+        private System.Windows.Forms.PictureBox pictureFoto;
+        private System.Windows.Forms.Button buttonBuscarFoto;
     }
 }
