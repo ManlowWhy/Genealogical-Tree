@@ -1,0 +1,103 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\ArbolGen.Tests.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\ArbolGen.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\ArbolGen.Tests.csproj",
+        "projectName": "ArbolGen.Tests",
+        "projectPath": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\ArbolGen.Tests.csproj",
+        "packagesPath": "C:\\Users\\olman\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\olman\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "targetAlias": "net48",
+            "projectReferences": {
+              "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\MapaTest.csproj": {
+                "projectPath": "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\MapaTest.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net48": {
+          "targetAlias": "net48",
+          "dependencies": {
+            "GMap.NET.Core": {
+              "target": "Package",
+              "version": "[2.1.7, )"
+            },
+            "MSTest.Analyzers": {
+              "target": "Package",
+              "version": "[3.6.4, )",
+              "versionOverride": "[3.6.4, )"
+            },
+            "MSTest.TestAdapter": {
+              "target": "Package",
+              "version": "[3.6.4, )",
+              "versionOverride": "[3.6.4, )"
+            },
+            "MSTest.TestFramework": {
+              "target": "Package",
+              "version": "[3.6.4, )",
+              "versionOverride": "[3.6.4, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.11.1, )",
+              "versionOverride": "[17.11.1, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\MapaTest.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\MapaTest.csproj",
+        "projectName": "MapaTest",
+        "projectPath": "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\MapaTest.csproj",
+        "UsingMicrosoftNETSdk": false,
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net48": {}
+      }
+    }
+  }
+}

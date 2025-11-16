@@ -1,0 +1,86 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|c:\\users\\olman\\downloads\\asd\\genealogical-tree-main\\grafofamiliar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|solutionrelative:grafofamiliar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{929027D6-75D9-4839-A23E-29CFDDB33E3F}|..\\ArbolGen.Tests\\ArbolGen.Tests.csproj|c:\\users\\olman\\downloads\\asd\\arbolgen.tests\\relacionesarboltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{929027D6-75D9-4839-A23E-29CFDDB33E3F}|..\\ArbolGen.Tests\\ArbolGen.Tests.csproj|c:\\users\\olman\\downloads\\asd\\arbolgen.tests\\grafofamiliartests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{929027D6-75D9-4839-A23E-29CFDDB33E3F}|..\\ArbolGen.Tests\\ArbolGen.Tests.csproj|c:\\users\\olman\\downloads\\asd\\arbolgen.tests\\edadtests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GrafoFamiliar.cs",
+              "DocumentMoniker": "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\GrafoFamiliar.cs",
+              "RelativeDocumentMoniker": "GrafoFamiliar.cs",
+              "ToolTip": "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\GrafoFamiliar.cs",
+              "RelativeToolTip": "GrafoFamiliar.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T11:29:26.077Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "EdadTests.cs",
+              "DocumentMoniker": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\EdadTests.cs",
+              "RelativeDocumentMoniker": "..\\ArbolGen.Tests\\EdadTests.cs",
+              "ToolTip": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\EdadTests.cs",
+              "RelativeToolTip": "..\\ArbolGen.Tests\\EdadTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T11:28:22.648Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GrafoFamiliarTests.cs",
+              "DocumentMoniker": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\GrafoFamiliarTests.cs",
+              "RelativeDocumentMoniker": "..\\ArbolGen.Tests\\GrafoFamiliarTests.cs",
+              "ToolTip": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\GrafoFamiliarTests.cs",
+              "RelativeToolTip": "..\\ArbolGen.Tests\\GrafoFamiliarTests.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAIwAEAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T11:28:13.467Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RelacionesArbolTests.cs",
+              "DocumentMoniker": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\RelacionesArbolTests.cs",
+              "RelativeDocumentMoniker": "..\\ArbolGen.Tests\\RelacionesArbolTests.cs",
+              "ToolTip": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\RelacionesArbolTests.cs",
+              "RelativeToolTip": "..\\ArbolGen.Tests\\RelacionesArbolTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T11:20:08.249Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
