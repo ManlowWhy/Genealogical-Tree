@@ -280,6 +280,8 @@ namespace MapaTest
                 marker = new GMarkerGoogle(new PointLatLng(p.Latitud, p.Longitud), GMarkerGoogleType.blue_pushpin);
             }
 
+
+            // Aquí hay que revisar para que se visualizen bien los globos blancos de info (tooltip)
             marker.ToolTipText = $"{p.Nombre}\nEdad: {p.Edad}\nParentezco: {p.Parentezco}";
             marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
             marker.Tag = p.Cedula;
