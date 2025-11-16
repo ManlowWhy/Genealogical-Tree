@@ -136,6 +136,8 @@ namespace MapaTest
 
             // 3) Armar padre–hijo usando tus relaciones hechas “a mano”
             var padresCount = new Dictionary<string, int>();
+            var padresPorCedula = new Dictionary<string, List<NodoVista>>();
+
             foreach (var ced in nodos.Keys)
                 padresCount[ced] = 0;
 
@@ -151,48 +153,73 @@ namespace MapaTest
                     padre.Hijos.Add(hijo);
 
                 padresCount[rel.CedulaHijo]++;
+
+                // Construimos también la lista de padres para cada hijo
+                if (!padresPorCedula.TryGetValue(rel.CedulaHijo, out var listaPadres))
+                {
+                    listaPadres = new List<NodoVista>();
+                    padresPorCedula[rel.CedulaHijo] = listaPadres;
+                }
+                if (!listaPadres.Contains(padre))
+                    listaPadres.Add(padre);
             }
 
-            // 4) Calcular nivel generacional (0 = sin padres, 1 = hijos de esos, etc.)
-            var visitados = new HashSet<string>();
+            // 4) Calcular "profundidad hacia abajo" empezando desde los hijos (sin hijos propios)
+            // depth[ced] = 0 para hojas, luego padres = max(hijos) + 1
+            var depth = new Dictionary<string, int>();
+            foreach (var kv in nodos)
+                depth[kv.Key] = 0;
+
             var cola = new Queue<NodoVista>();
+            var enCola = new HashSet<string>();
 
-            // raíces = personas sin padres
-            var raices = nodos.Values
-                .Where(n => padresCount.TryGetValue(n.Persona.Cedula, out int c) ? c == 0 : true)
-                .ToList();
-
-            foreach (var r in raices)
+            // Hojas = personas sin hijos
+            foreach (var n in nodos.Values)
             {
-                r.Nivel = 0;
-                cola.Enqueue(r);
-                visitados.Add(r.Persona.Cedula);
+                if (n.Hijos.Count == 0)
+                {
+                    cola.Enqueue(n);
+                    enCola.Add(n.Persona.Cedula);
+                }
             }
 
             while (cola.Count > 0)
             {
                 var actual = cola.Dequeue();
-                foreach (var hijo in actual.Hijos)
-                {
-                    int nuevoNivel = actual.Nivel + 1;
-                    if (!visitados.Contains(hijo.Persona.Cedula) || nuevoNivel > hijo.Nivel)
-                    {
-                        hijo.Nivel = nuevoNivel;
-                    }
+                int dActual = depth[actual.Persona.Cedula];
 
-                    if (!visitados.Contains(hijo.Persona.Cedula))
+                // Propagamos hacia los padres
+                if (padresPorCedula.TryGetValue(actual.Persona.Cedula, out var listaPadres))
+                {
+                    foreach (var padre in listaPadres)
                     {
-                        visitados.Add(hijo.Persona.Cedula);
-                        cola.Enqueue(hijo);
+                        var cedP = padre.Persona.Cedula;
+                        int old = depth[cedP];
+                        int proposed = dActual + 1;
+
+                        if (proposed > old)
+                        {
+                            depth[cedP] = proposed;
+                            if (!enCola.Contains(cedP))
+                            {
+                                cola.Enqueue(padre);
+                                enCola.Add(cedP);
+                            }
+                        }
                     }
                 }
             }
 
-            // Personas sin relaciones (ni padres ni hijos) → nivel 0
-            foreach (var n in nodos.Values)
+            // Si no había relaciones, todos se quedan con depth 0
+            int maxDepth = depth.Values.DefaultIfEmpty(0).Max();
+
+            // Convertimos la "profundidad" en Nivel de dibujo:
+            // más profundidad => generación más nueva => va más abajo.
+            // Nivel = maxDepth - depth
+            foreach (var kv in nodos)
             {
-                if (!visitados.Contains(n.Persona.Cedula))
-                    n.Nivel = 0;
+                string ced = kv.Key;
+                kv.Value.Nivel = maxDepth - depth[ced];
             }
 
             // 5) Layout: agrupar por nivel y dibujar nodos
