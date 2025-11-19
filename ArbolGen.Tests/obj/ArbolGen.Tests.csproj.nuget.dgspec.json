@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\ArbolGen.Tests.csproj": {}
+    "C:\\Users\\olman\\OneDrive\\Documentos\\GitHub\\Genealogical-Tree\\ArbolGen.Tests\\ArbolGen.Tests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\ArbolGen.Tests.csproj": {
+    "C:\\Users\\olman\\OneDrive\\Documentos\\GitHub\\Genealogical-Tree\\ArbolGen.Tests\\ArbolGen.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\ArbolGen.Tests.csproj",
+        "projectUniqueName": "C:\\Users\\olman\\OneDrive\\Documentos\\GitHub\\Genealogical-Tree\\ArbolGen.Tests\\ArbolGen.Tests.csproj",
         "projectName": "ArbolGen.Tests",
-        "projectPath": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\ArbolGen.Tests.csproj",
+        "projectPath": "C:\\Users\\olman\\OneDrive\\Documentos\\GitHub\\Genealogical-Tree\\ArbolGen.Tests\\ArbolGen.Tests.csproj",
         "packagesPath": "C:\\Users\\olman\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\olman\\Downloads\\asd\\ArbolGen.Tests\\obj\\",
+        "outputPath": "C:\\Users\\olman\\OneDrive\\Documentos\\GitHub\\Genealogical-Tree\\ArbolGen.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,8 +32,8 @@
           "net48": {
             "targetAlias": "net48",
             "projectReferences": {
-              "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\MapaTest.csproj": {
-                "projectPath": "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\MapaTest.csproj"
+              "C:\\Users\\olman\\OneDrive\\Documentos\\GitHub\\Genealogical-Tree\\Genealogical-Tree-main\\MapaTest.csproj": {
+                "projectPath": "C:\\Users\\olman\\OneDrive\\Documentos\\GitHub\\Genealogical-Tree\\Genealogical-Tree-main\\MapaTest.csproj"
               }
             }
           }
@@ -83,11 +83,11 @@
         }
       }
     },
-    "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\MapaTest.csproj": {
+    "C:\\Users\\olman\\OneDrive\\Documentos\\GitHub\\Genealogical-Tree\\Genealogical-Tree-main\\MapaTest.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\MapaTest.csproj",
+        "projectUniqueName": "C:\\Users\\olman\\OneDrive\\Documentos\\GitHub\\Genealogical-Tree\\Genealogical-Tree-main\\MapaTest.csproj",
         "projectName": "MapaTest",
-        "projectPath": "C:\\Users\\olman\\Downloads\\asd\\Genealogical-Tree-main\\MapaTest.csproj",
+        "projectPath": "C:\\Users\\olman\\OneDrive\\Documentos\\GitHub\\Genealogical-Tree\\Genealogical-Tree-main\\MapaTest.csproj",
         "UsingMicrosoftNETSdk": false,
         "frameworks": {
           "net48": {

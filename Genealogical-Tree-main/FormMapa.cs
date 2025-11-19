@@ -251,6 +251,7 @@ namespace MapaTest
 
             RedibujarRelaciones();
             gMapControl1.Refresh();
+            ActualizarDistanciasExtremas();
         }
 
         private void CrearMiembroEn(PointLatLng pt)
@@ -261,6 +262,7 @@ namespace MapaTest
                 AgregarMarkerPersona(frm.PersonaCreada);
                 RedibujarRelaciones();
                 gMapControl1.Refresh();
+                ActualizarDistanciasExtremas();
             }
         }
 
@@ -426,6 +428,61 @@ namespace MapaTest
             gMapControl1.Refresh();
         }
 
+        // Ayuda a la fx CalcularParesDistancia()
+        private void ActualizarDistanciasExtremas()
+        {
+            if (DatosGlobales.Familia.Count < 2)
+            {
+                lblMinDist.Text = "—";
+                lblMaxDist.Text = "—";
+                return;
+            }
+
+            CalcularParesDistancia(out string parMin, out double distMin,
+                                   out string parMax, out double distMax);
+
+            lblMinDist.Text = $"Más cercanos: {parMin} → {distMin:0.00} km";
+            lblMaxDist.Text = $"Más lejanos : {parMax} → {distMax:0.00} km";
+        }
+
+        // Pares lejanos y cercanos
+        private void CalcularParesDistancia(out string parMin, out double distMin,
+                                            out string parMax, out double distMax)
+        {
+            parMin = "";
+            parMax = "";
+            distMin = double.MaxValue;
+            distMax = double.MinValue;
+
+            var fam = DatosGlobales.Familia;
+
+            for (int i = 0; i < fam.Count; i++)
+            {
+                var p1 = fam[i];
+                var pt1 = new PointLatLng(p1.Latitud, p1.Longitud);
+
+                for (int j = i + 1; j < fam.Count; j++)
+                {
+                    var p2 = fam[j];
+                    var pt2 = new PointLatLng(p2.Latitud, p2.Longitud);
+
+                    double d = HaversineKm(pt1, pt2);
+
+                    if (d < distMin)
+                    {
+                        distMin = d;
+                        parMin = $"{p1.Nombre} ⇄ {p2.Nombre}";
+                    }
+
+                    if (d > distMax)
+                    {
+                        distMax = d;
+                        parMax = $"{p1.Nombre} ⇄ {p2.Nombre}";
+                    }
+                }
+            }
+        }
+
         private void EditarPersonaSeleccionada()
         {
             if (_markerSeleccionado == null) return;
@@ -453,6 +510,8 @@ namespace MapaTest
 
                 // Volver a cargar marcadores
                 CargarMarcadoresIniciales();
+                ActualizarDistanciasExtremas();
+
             }
         }
 
@@ -482,6 +541,7 @@ namespace MapaTest
 
             RedibujarRelaciones();
             gMapControl1.Refresh();
+            ActualizarDistanciasExtremas();
         }
     }
 

@@ -10,7 +10,7 @@ namespace MapaTest
 {
     public static class GrafoFamiliar
     {
-        
+
         public static Dictionary<string, NodoFamiliar> Nodos { get; } =
             new Dictionary<string, NodoFamiliar>(StringComparer.OrdinalIgnoreCase);
 

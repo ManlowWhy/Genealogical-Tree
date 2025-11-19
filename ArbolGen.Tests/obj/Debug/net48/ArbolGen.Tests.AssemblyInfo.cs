@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ArbolGen.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+97508f3d59becf80cee532335865c2dfff0d2f27")]
 [assembly: System.Reflection.AssemblyProductAttribute("ArbolGen.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ArbolGen.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
