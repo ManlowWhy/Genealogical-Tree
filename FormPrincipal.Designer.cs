@@ -63,27 +63,30 @@
             // 
             this.groupBoxPrincipal.Controls.Add(this.richTextBoxPrincipal);
             this.groupBoxPrincipal.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Bold);
-            this.groupBoxPrincipal.Location = new System.Drawing.Point(507, 113);
+            this.groupBoxPrincipal.ForeColor = System.Drawing.Color.White;
+            this.groupBoxPrincipal.Location = new System.Drawing.Point(507, 75);
             this.groupBoxPrincipal.Name = "groupBoxPrincipal";
-            this.groupBoxPrincipal.Size = new System.Drawing.Size(502, 222);
+            this.groupBoxPrincipal.Size = new System.Drawing.Size(502, 296);
             this.groupBoxPrincipal.TabIndex = 8;
             this.groupBoxPrincipal.TabStop = false;
             this.groupBoxPrincipal.Text = "Instrucciones:";
             // 
             // richTextBoxPrincipal
             // 
+            this.richTextBoxPrincipal.BackColor = System.Drawing.Color.Black;
             this.richTextBoxPrincipal.Font = new System.Drawing.Font("Arial Narrow", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBoxPrincipal.Location = new System.Drawing.Point(6, 28);
+            this.richTextBoxPrincipal.ForeColor = System.Drawing.Color.White;
+            this.richTextBoxPrincipal.Location = new System.Drawing.Point(6, 47);
             this.richTextBoxPrincipal.Name = "richTextBoxPrincipal";
             this.richTextBoxPrincipal.ReadOnly = true;
-            this.richTextBoxPrincipal.Size = new System.Drawing.Size(496, 172);
+            this.richTextBoxPrincipal.Size = new System.Drawing.Size(496, 205);
             this.richTextBoxPrincipal.TabIndex = 0;
             this.richTextBoxPrincipal.Text = resources.GetString("richTextBoxPrincipal.Text");
             // 
             // buttonPrincipal
             // 
             this.buttonPrincipal.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F);
-            this.buttonPrincipal.Location = new System.Drawing.Point(721, 365);
+            this.buttonPrincipal.Location = new System.Drawing.Point(721, 394);
             this.buttonPrincipal.Name = "buttonPrincipal";
             this.buttonPrincipal.Size = new System.Drawing.Size(75, 23);
             this.buttonPrincipal.TabIndex = 9;
@@ -94,7 +97,9 @@
             // labelPrincipal
             // 
             this.labelPrincipal.AutoSize = true;
+            this.labelPrincipal.BackColor = System.Drawing.Color.Black;
             this.labelPrincipal.Font = new System.Drawing.Font("Arial Rounded MT Bold", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPrincipal.ForeColor = System.Drawing.Color.White;
             this.labelPrincipal.Location = new System.Drawing.Point(121, 35);
             this.labelPrincipal.Name = "labelPrincipal";
             this.labelPrincipal.Size = new System.Drawing.Size(256, 32);
@@ -105,8 +110,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(1021, 450);
+            this.BackColor = System.Drawing.Color.Black;
+            this.ClientSize = new System.Drawing.Size(1069, 461);
             this.Controls.Add(this.labelPrincipal);
             this.Controls.Add(this.buttonPrincipal);
             this.Controls.Add(this.groupBoxPrincipal);

@@ -86,6 +86,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatosGlobales.cs" />
+    <Compile Include="FormArbol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormArbol.Designer.cs">
+      <DependentUpon>FormArbol.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMapa.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,6 +115,9 @@
     <Compile Include="Persona.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormArbol.resx">
+      <DependentUpon>FormArbol.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMapa.resx">
       <DependentUpon>FormMapa.cs</DependentUpon>
     </EmbeddedResource>

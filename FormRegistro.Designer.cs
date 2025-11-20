@@ -32,7 +32,6 @@
             this.groupBoxDatosPersona = new System.Windows.Forms.GroupBox();
             this.pictureFoto = new System.Windows.Forms.PictureBox();
             this.buttonBuscarFoto = new System.Windows.Forms.Button();
-            this.comboBoxParentezco = new System.Windows.Forms.ComboBox();
             this.buttonAgregarFamiliar = new System.Windows.Forms.Button();
             this.dtpNacimiento = new System.Windows.Forms.DateTimePicker();
             this.buttonVerMapa = new System.Windows.Forms.Button();
@@ -60,6 +59,7 @@
             // labelNombre
             // 
             this.labelNombre.AutoSize = true;
+            this.labelNombre.ForeColor = System.Drawing.Color.White;
             this.labelNombre.Location = new System.Drawing.Point(17, 25);
             this.labelNombre.Name = "labelNombre";
             this.labelNombre.Size = new System.Drawing.Size(47, 13);
@@ -70,7 +70,6 @@
             // 
             this.groupBoxDatosPersona.Controls.Add(this.pictureFoto);
             this.groupBoxDatosPersona.Controls.Add(this.buttonBuscarFoto);
-            this.groupBoxDatosPersona.Controls.Add(this.comboBoxParentezco);
             this.groupBoxDatosPersona.Controls.Add(this.buttonAgregarFamiliar);
             this.groupBoxDatosPersona.Controls.Add(this.dtpNacimiento);
             this.groupBoxDatosPersona.Controls.Add(this.buttonVerMapa);
@@ -94,7 +93,7 @@
             // 
             // pictureFoto
             // 
-            this.pictureFoto.Location = new System.Drawing.Point(204, 348);
+            this.pictureFoto.Location = new System.Drawing.Point(98, 347);
             this.pictureFoto.Name = "pictureFoto";
             this.pictureFoto.Size = new System.Drawing.Size(100, 59);
             this.pictureFoto.TabIndex = 22;
@@ -102,7 +101,7 @@
             // 
             // buttonBuscarFoto
             // 
-            this.buttonBuscarFoto.Location = new System.Drawing.Point(109, 360);
+            this.buttonBuscarFoto.Location = new System.Drawing.Point(109, 425);
             this.buttonBuscarFoto.Name = "buttonBuscarFoto";
             this.buttonBuscarFoto.Size = new System.Drawing.Size(75, 23);
             this.buttonBuscarFoto.TabIndex = 21;
@@ -110,17 +109,9 @@
             this.buttonBuscarFoto.UseVisualStyleBackColor = true;
             this.buttonBuscarFoto.Click += new System.EventHandler(this.buttonBuscarFoto_Click);
             // 
-            // comboBoxParentezco
-            // 
-            this.comboBoxParentezco.FormattingEnabled = true;
-            this.comboBoxParentezco.Location = new System.Drawing.Point(158, 520);
-            this.comboBoxParentezco.Name = "comboBoxParentezco";
-            this.comboBoxParentezco.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxParentezco.TabIndex = 20;
-            // 
             // buttonAgregarFamiliar
             // 
-            this.buttonAgregarFamiliar.Location = new System.Drawing.Point(98, 430);
+            this.buttonAgregarFamiliar.Location = new System.Drawing.Point(87, 474);
             this.buttonAgregarFamiliar.Name = "buttonAgregarFamiliar";
             this.buttonAgregarFamiliar.Size = new System.Drawing.Size(120, 23);
             this.buttonAgregarFamiliar.TabIndex = 14;
@@ -140,7 +131,7 @@
             // 
             // buttonVerMapa
             // 
-            this.buttonVerMapa.Location = new System.Drawing.Point(171, 512);
+            this.buttonVerMapa.Location = new System.Drawing.Point(87, 513);
             this.buttonVerMapa.Margin = new System.Windows.Forms.Padding(2);
             this.buttonVerMapa.Name = "buttonVerMapa";
             this.buttonVerMapa.Size = new System.Drawing.Size(124, 23);
@@ -172,6 +163,7 @@
             this.groupBoxUbicacion.Controls.Add(this.textBoxLatitud);
             this.groupBoxUbicacion.Controls.Add(this.labelLongitud);
             this.groupBoxUbicacion.Controls.Add(this.labelLatitud);
+            this.groupBoxUbicacion.ForeColor = System.Drawing.Color.White;
             this.groupBoxUbicacion.Location = new System.Drawing.Point(12, 173);
             this.groupBoxUbicacion.Name = "groupBoxUbicacion";
             this.groupBoxUbicacion.Size = new System.Drawing.Size(284, 110);
@@ -197,6 +189,7 @@
             // labelLongitud
             // 
             this.labelLongitud.AutoSize = true;
+            this.labelLongitud.ForeColor = System.Drawing.Color.White;
             this.labelLongitud.Location = new System.Drawing.Point(10, 73);
             this.labelLongitud.Name = "labelLongitud";
             this.labelLongitud.Size = new System.Drawing.Size(51, 13);
@@ -206,6 +199,7 @@
             // labelLatitud
             // 
             this.labelLatitud.AutoSize = true;
+            this.labelLatitud.ForeColor = System.Drawing.Color.White;
             this.labelLatitud.Location = new System.Drawing.Point(10, 36);
             this.labelLatitud.Name = "labelLatitud";
             this.labelLatitud.Size = new System.Drawing.Size(42, 13);
@@ -237,6 +231,7 @@
             // labelCedula
             // 
             this.labelCedula.AutoSize = true;
+            this.labelCedula.ForeColor = System.Drawing.Color.White;
             this.labelCedula.Location = new System.Drawing.Point(17, 62);
             this.labelCedula.Name = "labelCedula";
             this.labelCedula.Size = new System.Drawing.Size(43, 13);
@@ -246,6 +241,7 @@
             // labelFechaNaci
             // 
             this.labelFechaNaci.AutoSize = true;
+            this.labelFechaNaci.ForeColor = System.Drawing.Color.White;
             this.labelFechaNaci.Location = new System.Drawing.Point(17, 104);
             this.labelFechaNaci.Name = "labelFechaNaci";
             this.labelFechaNaci.Size = new System.Drawing.Size(109, 13);
@@ -255,6 +251,7 @@
             // labelEdad
             // 
             this.labelEdad.AutoSize = true;
+            this.labelEdad.ForeColor = System.Drawing.Color.White;
             this.labelEdad.Location = new System.Drawing.Point(17, 136);
             this.labelEdad.Name = "labelEdad";
             this.labelEdad.Size = new System.Drawing.Size(67, 13);
@@ -275,7 +272,7 @@
             // panelArbol
             // 
             this.panelArbol.AutoScroll = true;
-            this.panelArbol.BackColor = System.Drawing.Color.White;
+            this.panelArbol.BackColor = System.Drawing.Color.Black;
             this.panelArbol.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelArbol.Location = new System.Drawing.Point(3, 16);
             this.panelArbol.Margin = new System.Windows.Forms.Padding(2);
@@ -287,7 +284,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(913, 487);
+            this.BackColor = System.Drawing.Color.Black;
+            this.ClientSize = new System.Drawing.Size(913, 629);
             this.Controls.Add(this.groupBoxArbol);
             this.Controls.Add(this.groupBoxDatosPersona);
             this.Name = "FormRegistro";
@@ -325,7 +323,6 @@
         private System.Windows.Forms.Panel panelArbol;
         private System.Windows.Forms.DateTimePicker dtpNacimiento;
         private System.Windows.Forms.Button buttonAgregarFamiliar;
-        private System.Windows.Forms.ComboBox comboBoxParentezco;
         private System.Windows.Forms.PictureBox pictureFoto;
         private System.Windows.Forms.Button buttonBuscarFoto;
     }

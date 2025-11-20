@@ -12,7 +12,6 @@ namespace MapaTest
             Application.SetCompatibleTextRenderingDefault(false);
 
             // El primer formulario será el que salga aquí:
-            //Application.Run(new FormMapa());
             Application.Run(new FormPrincipal());
         }
     }

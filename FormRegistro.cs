@@ -41,10 +41,10 @@ namespace MapaTest
 
             TipoRelacionActual = tipoRelacion;
             PersonaReferencia = personaReferencia;
-            // Ya NO tocamos comboBoxParentezco: las personas se crean sin parentezco obligatorio.
+            //las personas se crean sin parentezco obligatorio
         }
 
-        // ===================== Árbol (igual que antes) =====================
+        //Arbol
 
         private List<string> ObtenerPadresSegunParentezco(string parentezco)
         {
@@ -62,26 +62,6 @@ namespace MapaTest
             }
         }
 
-        private void ReconectarGrafo()
-        {
-            foreach (var nodo in GrafoFamiliar.Nodos.Values)
-                nodo.Hijos.Clear();
-
-            foreach (var posibleHijo in GrafoFamiliar.Nodos.Values)
-            {
-                var padresEsperados = ObtenerPadresSegunParentezco(posibleHijo.Parentezco);
-                foreach (var parentezcoPadre in padresEsperados)
-                {
-                    if (GrafoFamiliar.Nodos.ContainsKey(parentezcoPadre))
-                    {
-                        var padreNodo = GrafoFamiliar.Nodos[parentezcoPadre];
-                        if (!padreNodo.Hijos.Contains(posibleHijo))
-                            padreNodo.Hijos.Add(posibleHijo);
-                    }
-                }
-            }
-        }
-
         private void DibujarArbol()
         {
             panelArbol.Invalidate();
@@ -92,26 +72,6 @@ namespace MapaTest
             public Persona Persona { get; set; }
             public List<NodoVista> Hijos { get; } = new List<NodoVista>();
             public int Nivel { get; set; } = 0;
-        }
-
-        private int ObtenerNivelGeneracional(string parentezco)
-        {
-            switch (parentezco)
-            {
-                case "Abuela Materna":
-                case "Abuelo Materno":
-                case "Abuela Paterna":
-                case "Abuelo Paterno":
-                    return 0;
-                case "Madre":
-                case "Padre":
-                    return 1;
-                case "Hijo":
-                case "Hija":
-                    return 2;
-                default:
-                    return 3;
-            }
         }
 
         private void panelArbol_Paint(object sender, PaintEventArgs e)
@@ -134,7 +94,7 @@ namespace MapaTest
             }
             if (nodos.Count == 0) return;
 
-            // 3) Armar padre–hijo usando tus relaciones hechas “a mano”
+            // 3) Armar padre–hijo usando relaciones
             var padresCount = new Dictionary<string, int>();
             var padresPorCedula = new Dictionary<string, List<NodoVista>>();
 
@@ -154,7 +114,7 @@ namespace MapaTest
 
                 padresCount[rel.CedulaHijo]++;
 
-                // Construimos también la lista de padres para cada hijo
+                // Construccion lista de padres para cada hijo
                 if (!padresPorCedula.TryGetValue(rel.CedulaHijo, out var listaPadres))
                 {
                     listaPadres = new List<NodoVista>();
@@ -293,7 +253,7 @@ namespace MapaTest
             }
 
             // 6) Dibujar líneas padre–hijo
-            using (var pen = new Pen(Color.Black, 2))
+            using (var pen = new Pen(Color.White, 2))
             {
                 foreach (var rel in RelacionesFamilia.Relaciones)
                 {
@@ -327,8 +287,25 @@ namespace MapaTest
                 MessageBox.Show("Ingrese la Cédula.", "Dato requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBoxCedula.Focus(); return;
             }
-            // ⚠️ AHORA NO OBLIGAMOS A ELEGIR PARENTEZCO
-            // if (string.IsNullOrWhiteSpace(comboBoxParentezco.Text)) ...
+
+            // Cédula debe ser SOLO números
+            if (!long.TryParse(textBoxCedula.Text.Trim(), out _))
+            {
+                MessageBox.Show("La cédula debe contener solo números enteros.",
+                    "Formato incorrecto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxCedula.Focus();
+                return;
+            }
+
+            // Evitar cédula duplicada
+            string cedulaIngresada = textBoxCedula.Text.Trim();
+            if (DatosGlobales.Familia.Any(p => p.Cedula == cedulaIngresada))
+            {
+                MessageBox.Show("Ya existe un familiar con esta cédula. Ingrese una diferente.",
+                    "Cédula duplicada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxCedula.Focus();
+                return;
+            }
 
             DateTime fechaNacimientoValida = dtpNacimiento.Value;
             if (fechaNacimientoValida > DateTime.Today)
@@ -373,10 +350,10 @@ namespace MapaTest
             var persona = new Persona
             {
                 Nombre = textBoxNombre.Text.Trim(),
-                Cedula = textBoxCedula.Text.Trim(),
+                Cedula = cedulaIngresada,
                 FechaNacimiento = fechaNacimientoValida.ToString("yyyy-MM-dd"),
                 Edad = edadEntera.ToString("F0", culture),
-                Parentezco = comboBoxParentezco.Text,  // puede estar vacío
+                Parentezco = "",
                 Latitud = latitudValida,
                 Longitud = longitudValida,
                 RutaFoto = textBoxRutaFoto.Text.Trim()
@@ -407,6 +384,8 @@ namespace MapaTest
 
             MessageBox.Show("Familiar agregado correctamente.");
         }
+
+
 
         private void buttonVerMapa_Click(object sender, EventArgs e)
         {
@@ -453,8 +432,6 @@ namespace MapaTest
             }
 
             textBoxEdad.Text = p.Edad;
-            comboBoxParentezco.Text = p.Parentezco;
-
             textBoxLatitud.Text = p.Latitud.ToString(CultureInfo.InvariantCulture);
             textBoxLongitud.Text = p.Longitud.ToString(CultureInfo.InvariantCulture);
 
