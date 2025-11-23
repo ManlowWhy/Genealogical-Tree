@@ -41,10 +41,10 @@ namespace MapaTest
 
             TipoRelacionActual = tipoRelacion;
             PersonaReferencia = personaReferencia;
-            // Ya NO tocamos comboBoxParentezco: las personas se crean sin parentezco obligatorio.
+            // las personas se crean sin parentezco obligatorio
         }
 
-        // ===================== Árbol (igual que antes) =====================
+        // ===================== Árbol =====================
 
         private List<string> ObtenerPadresSegunParentezco(string parentezco)
         {
@@ -62,26 +62,6 @@ namespace MapaTest
             }
         }
 
-        private void ReconectarGrafo()
-        {
-            foreach (var nodo in GrafoFamiliar.Nodos.Values)
-                nodo.Hijos.Clear();
-
-            foreach (var posibleHijo in GrafoFamiliar.Nodos.Values)
-            {
-                var padresEsperados = ObtenerPadresSegunParentezco(posibleHijo.Parentezco);
-                foreach (var parentezcoPadre in padresEsperados)
-                {
-                    if (GrafoFamiliar.Nodos.ContainsKey(parentezcoPadre))
-                    {
-                        var padreNodo = GrafoFamiliar.Nodos[parentezcoPadre];
-                        if (!padreNodo.Hijos.Contains(posibleHijo))
-                            padreNodo.Hijos.Add(posibleHijo);
-                    }
-                }
-            }
-        }
-
         private void DibujarArbol()
         {
             panelArbol.Invalidate();
@@ -92,26 +72,6 @@ namespace MapaTest
             public Persona Persona { get; set; }
             public List<NodoVista> Hijos { get; } = new List<NodoVista>();
             public int Nivel { get; set; } = 0;
-        }
-
-        private int ObtenerNivelGeneracional(string parentezco)
-        {
-            switch (parentezco)
-            {
-                case "Abuela Materna":
-                case "Abuelo Materno":
-                case "Abuela Paterna":
-                case "Abuelo Paterno":
-                    return 0;
-                case "Madre":
-                case "Padre":
-                    return 1;
-                case "Hijo":
-                case "Hija":
-                    return 2;
-                default:
-                    return 3;
-            }
         }
 
         private void panelArbol_Paint(object sender, PaintEventArgs e)
@@ -134,7 +94,7 @@ namespace MapaTest
             }
             if (nodos.Count == 0) return;
 
-            // 3) Armar padre–hijo usando tus relaciones hechas “a mano”
+            // 3) Armar padre–hijo usando relaciones
             var padresCount = new Dictionary<string, int>();
             var padresPorCedula = new Dictionary<string, List<NodoVista>>();
 
@@ -154,7 +114,7 @@ namespace MapaTest
 
                 padresCount[rel.CedulaHijo]++;
 
-                // Construimos también la lista de padres para cada hijo
+                // Construccion lista de padres para cada hijo
                 if (!padresPorCedula.TryGetValue(rel.CedulaHijo, out var listaPadres))
                 {
                     listaPadres = new List<NodoVista>();
@@ -164,8 +124,7 @@ namespace MapaTest
                     listaPadres.Add(padre);
             }
 
-            // 4) Calcular "profundidad hacia abajo" empezando desde los hijos (sin hijos propios)
-            // depth[ced] = 0 para hojas, luego padres = max(hijos) + 1
+            // 4) Calcular "profundidad hacia abajo"
             var depth = new Dictionary<string, int>();
             foreach (var kv in nodos)
                 depth[kv.Key] = 0;
@@ -173,7 +132,6 @@ namespace MapaTest
             var cola = new Queue<NodoVista>();
             var enCola = new HashSet<string>();
 
-            // Hojas = personas sin hijos
             foreach (var n in nodos.Values)
             {
                 if (n.Hijos.Count == 0)
@@ -188,7 +146,6 @@ namespace MapaTest
                 var actual = cola.Dequeue();
                 int dActual = depth[actual.Persona.Cedula];
 
-                // Propagamos hacia los padres
                 if (padresPorCedula.TryGetValue(actual.Persona.Cedula, out var listaPadres))
                 {
                     foreach (var padre in listaPadres)
@@ -210,19 +167,15 @@ namespace MapaTest
                 }
             }
 
-            // Si no había relaciones, todos se quedan con depth 0
             int maxDepth = depth.Values.DefaultIfEmpty(0).Max();
 
-            // Convertimos la "profundidad" en Nivel de dibujo:
-            // más profundidad => generación más nueva => va más abajo.
-            // Nivel = maxDepth - depth
             foreach (var kv in nodos)
             {
                 string ced = kv.Key;
                 kv.Value.Nivel = maxDepth - depth[ced];
             }
 
-            // 5) Layout: agrupar por nivel y dibujar nodos
+            // 5) Layout
             int nodoAncho = 160;
             int nodoAlto = 60;
             int margenX = 20;
@@ -248,35 +201,30 @@ namespace MapaTest
                     g.FillRectangle(Brushes.LightBlue, rect);
                     g.DrawRectangle(Pens.Black, rect);
 
-                    // Zona de imagen a la izquierda (cuadrito)
                     int imgSize = nodoAlto - 10;
                     var rectImg = new Rectangle(rect.X + 5, rect.Y + 5, imgSize, imgSize);
 
-                    // Dibujar imagen si existe
                     if (!string.IsNullOrWhiteSpace(nodo.Persona.RutaFoto) &&
                         File.Exists(nodo.Persona.RutaFoto))
                     {
                         try
                         {
                             using (var imgTemp = Image.FromFile(nodo.Persona.RutaFoto))
-                            using (var img = new Bitmap(imgTemp)) // clonar
+                            using (var img = new Bitmap(imgTemp))
                             {
                                 g.DrawImage(img, rectImg);
                             }
                         }
                         catch
                         {
-                            // si falla la imagen, simplemente no se dibuja
                         }
                     }
                     else
                     {
-                        // Si no hay imagen, dibujamos un placeholder
                         g.FillRectangle(Brushes.Gray, rectImg);
                         g.DrawRectangle(Pens.Black, rectImg);
                     }
 
-                    // Texto a la derecha de la imagen
                     int textoX = rectImg.Right + 5;
                     int textoY = rect.Y + 5;
 
@@ -292,8 +240,7 @@ namespace MapaTest
                 }
             }
 
-            // 6) Dibujar líneas padre–hijo
-            using (var pen = new Pen(Color.Black, 2))
+            using (var pen = new Pen(Color.White, 2))
             {
                 foreach (var rel in RelacionesFamilia.Relaciones)
                 {
@@ -312,11 +259,12 @@ namespace MapaTest
             }
         }
 
+        // ===================== GUARDAR PERSONA =====================
+
         private void buttonAgregarFamiliar_Click(object sender, EventArgs e)
         {
             var culture = CultureInfo.InvariantCulture;
 
-            // === Validaciones de entrada ===
             if (string.IsNullOrWhiteSpace(textBoxNombre.Text))
             {
                 MessageBox.Show("Ingrese el Nombre.", "Dato requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -327,8 +275,27 @@ namespace MapaTest
                 MessageBox.Show("Ingrese la Cédula.", "Dato requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBoxCedula.Focus(); return;
             }
-            // ⚠️ AHORA NO OBLIGAMOS A ELEGIR PARENTEZCO
-            // if (string.IsNullOrWhiteSpace(comboBoxParentezco.Text)) ...
+
+            // Cédula debe ser SOLO números
+            if (!long.TryParse(textBoxCedula.Text.Trim(), out _))
+            {
+                MessageBox.Show("La cédula debe contener solo números enteros.",
+                    "Formato incorrecto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxCedula.Focus();
+                return;
+            }
+
+            string cedulaIngresada = textBoxCedula.Text.Trim();
+
+            // Evitar cédula duplicada (solo al crear nueva, no al editar)
+            bool esEdicion = DatosGlobales.Familia.Any(p => p.Cedula == cedulaIngresada && p == PersonaCreada);
+            if (!esEdicion && DatosGlobales.Familia.Any(p => p.Cedula == cedulaIngresada))
+            {
+                MessageBox.Show("Ya existe un familiar con esta cédula. Ingrese una diferente.",
+                    "Cédula duplicada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxCedula.Focus();
+                return;
+            }
 
             DateTime fechaNacimientoValida = dtpNacimiento.Value;
             if (fechaNacimientoValida > DateTime.Today)
@@ -338,15 +305,43 @@ namespace MapaTest
                 return;
             }
 
-            int edadEntera = (int)Math.Floor((DateTime.Today - fechaNacimientoValida).TotalDays / 365.2425);
-            if (!string.IsNullOrWhiteSpace(textBoxEdad.Text))
+            // Vivo / fallecido
+            bool estaVivo = !checkBoxFallecido.Checked;
+            DateTime? fechaDefuncionValida = null;
+
+            if (!estaVivo)
             {
-                if (!double.TryParse(textBoxEdad.Text, NumberStyles.Any, culture, out double edadValida))
+                fechaDefuncionValida = dtpDefuncion.Value;
+
+                if (fechaDefuncionValida < fechaNacimientoValida)
                 {
-                    MessageBox.Show("Por favor, ingrese la Edad como un número válido.", "Error de Entrada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    textBoxEdad.Focus(); return;
+                    MessageBox.Show("La fecha de defunción no puede ser anterior a la de nacimiento.",
+                        "Fecha inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
-                edadEntera = (int)Math.Round(edadValida);
+                if (fechaDefuncionValida > DateTime.Today)
+                {
+                    MessageBox.Show("La fecha de defunción no puede ser futura.",
+                        "Fecha inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
+            int edadEntera;
+            if (estaVivo)
+            {
+                edadEntera = CalcularEdad(fechaNacimientoValida, DateTime.Today);
+            }
+            else
+            {
+                edadEntera = CalcularEdad(fechaNacimientoValida, fechaDefuncionValida.Value);
+            }
+
+            // Si el usuario escribe manualmente una edad válida, la respetamos
+            if (!string.IsNullOrWhiteSpace(textBoxEdad.Text) &&
+                int.TryParse(textBoxEdad.Text, out int edadManual) && edadManual >= 0)
+            {
+                edadEntera = edadManual;
             }
 
             if (!double.TryParse(textBoxLatitud.Text, NumberStyles.Any, culture, out double latitudValida) ||
@@ -373,13 +368,16 @@ namespace MapaTest
             var persona = new Persona
             {
                 Nombre = textBoxNombre.Text.Trim(),
-                Cedula = textBoxCedula.Text.Trim(),
+                Cedula = cedulaIngresada,
                 FechaNacimiento = fechaNacimientoValida.ToString("yyyy-MM-dd"),
                 Edad = edadEntera.ToString("F0", culture),
-                Parentezco = comboBoxParentezco.Text,  // puede estar vacío
+                Parentezco = "", // ahora se manejan relaciones aparte
                 Latitud = latitudValida,
                 Longitud = longitudValida,
-                RutaFoto = textBoxRutaFoto.Text.Trim()
+                RutaFoto = textBoxRutaFoto.Text.Trim(),
+                EstaVivo = estaVivo,
+                FechaDefuncion = fechaDefuncionValida?.ToString("yyyy-MM-dd"),
+                EdadAlFallecer = estaVivo ? null : edadEntera.ToString("F0", culture)
             };
 
             var nodo = new NodoFamiliar
@@ -416,24 +414,54 @@ namespace MapaTest
 
         private void labelEdad_Click(object sender, EventArgs e) { }
 
-        private static int CalcularEdad(DateTime nacimiento)
+        // ========= CÁLCULO DE EDAD =========
+
+        private static int CalcularEdad(DateTime nacimiento, DateTime hasta)
         {
-            DateTime hoy = DateTime.Today;
-            int edad = hoy.Year - nacimiento.Year;
-            if (nacimiento.Date > hoy.AddYears(-edad)) edad--;
+            int edad = hasta.Year - nacimiento.Year;
+            if (nacimiento.Date > hasta.AddYears(-edad)) edad--;
             return Math.Max(0, edad);
         }
 
         private void dtpNacimiento_ValueChanged(object sender, EventArgs e)
         {
-            textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value).ToString();
+            if (checkBoxFallecido.Checked)
+                textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value, dtpDefuncion.Value).ToString();
+            else
+                textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value, DateTime.Today).ToString();
+        }
+
+        private void dtpDefuncion_ValueChanged(object sender, EventArgs e)
+        {
+            if (checkBoxFallecido.Checked)
+                textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value, dtpDefuncion.Value).ToString();
         }
 
         private void FormRegistro_Load(object sender, EventArgs e)
         {
             dtpNacimiento.MaxDate = DateTime.Today;
             dtpNacimiento.MinDate = new DateTime(1900, 1, 1);
-            textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value).ToString();
+
+            dtpDefuncion.MinDate = dtpNacimiento.MinDate;
+            dtpDefuncion.MaxDate = DateTime.Today;
+            dtpDefuncion.Enabled = false;
+
+            textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value, DateTime.Today).ToString();
+        }
+
+        private void checkBoxFallecido_CheckedChanged(object sender, EventArgs e)
+        {
+            dtpDefuncion.Enabled = checkBoxFallecido.Checked;
+
+            if (checkBoxFallecido.Checked)
+            {
+                dtpDefuncion.Value = DateTime.Today;
+                textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value, dtpDefuncion.Value).ToString();
+            }
+            else
+            {
+                textBoxEdad.Text = CalcularEdad(dtpNacimiento.Value, DateTime.Today).ToString();
+            }
         }
 
         private void groupBoxUbicacion_Enter(object sender, EventArgs e) { }
@@ -452,19 +480,26 @@ namespace MapaTest
                 dtpNacimiento.Value = fecha;
             }
 
-            textBoxEdad.Text = p.Edad;
-            comboBoxParentezco.Text = p.Parentezco;
+            // Cargar fallecido / vivo
+            checkBoxFallecido.Checked = !p.EstaVivo;
 
+            if (!p.EstaVivo && DateTime.TryParse(p.FechaDefuncion, out var fechaDef))
+            {
+                dtpDefuncion.Value = fechaDef;
+            }
+            else
+            {
+                dtpDefuncion.Value = DateTime.Today;
+            }
+
+            textBoxEdad.Text = p.Edad;
             textBoxLatitud.Text = p.Latitud.ToString(CultureInfo.InvariantCulture);
             textBoxLongitud.Text = p.Longitud.ToString(CultureInfo.InvariantCulture);
 
             textBoxRutaFoto.Text = p.RutaFoto ?? string.Empty;
         }
 
-        private void labelFoto_Click(object sender, EventArgs e)
-        {
-
-        }
+        private void labelFoto_Click(object sender, EventArgs e) { }
 
         private void buttonBuscarFoto_Click(object sender, EventArgs e)
         {

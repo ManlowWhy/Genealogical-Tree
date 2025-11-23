@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using WindowsFormsApp1;
 
 namespace MapaTest
 {
@@ -25,6 +26,11 @@ namespace MapaTest
         };
 
         private GMapOverlay _overlayPersonas;
+
+        // NUEVO: overlays para distancias desde una persona
+        private GMapOverlay _overlayDistancias;
+        private GMapOverlay _overlayDistanciasEtiquetas;
+
         private ContextMenuStrip _ctxMapa;
         private PointLatLng _lastClickPoint;
 
@@ -73,11 +79,18 @@ namespace MapaTest
             gMapControl1.Overlays.Add(_overlayRutas);
             gMapControl1.Overlays.Add(_overlayEtiquetas);
 
-            // 🔹 MENÚ PARA EL MAPA (click derecho en lugar vacío)
+            // NUEVO: overlays de distancias desde persona
+            _overlayDistancias = new GMapOverlay("distancias");
+            _overlayDistanciasEtiquetas = new GMapOverlay("distancias_etiquetas");
+            gMapControl1.Overlays.Add(_overlayDistancias);
+            gMapControl1.Overlays.Add(_overlayDistanciasEtiquetas);
+
+            // MENÚ PARA EL MAPA (click derecho en lugar vacío)
             _ctxMapa = new ContextMenuStrip();
             _ctxMapa.Items.Add("Nuevo miembro aquí", null, (s, e) => CrearMiembroEn(_lastClickPoint));
+            _ctxMapa.Items.Add("Ocultar distancias", null, (s, e) => LimpiarDistanciasDesdePersona());
 
-            // 🔹 MENÚ PARA LOS MARCADORES (click derecho en una persona)
+            // MENÚ PARA LOS MARCADORES (click derecho en una persona)
             _ctxMarker = new ContextMenuStrip();
 
             _mnuPadreDe = new ToolStripMenuItem("", null, (s, e) => ConectarOrigenDestino(TipoConexion.PadreDe));
@@ -89,11 +102,16 @@ namespace MapaTest
             _ctxMarker.Items.Add(_mnuMadreDe);
             _ctxMarker.Items.Add(_mnuHijoDe);
             _ctxMarker.Items.Add(_mnuHijaDe);
+
+            _ctxMarker.Items.Add(new ToolStripSeparator());
+            _ctxMarker.Items.Add("Ver distancias a todos", null, (s, e) => VerDistanciasDesdeSeleccionado());
+            _ctxMarker.Items.Add("Ocultar distancias", null, (s, e) => LimpiarDistanciasDesdePersona());
+
             _ctxMarker.Items.Add(new ToolStripSeparator());
             _ctxMarker.Items.Add("Editar", null, (s, e) => EditarPersonaSeleccionada());
             _ctxMarker.Items.Add("Eliminar", null, (s, e) => EliminarPersonaSeleccionada());
 
-            // 🔹 Mouse (clicks sobre mapa y marcadores)
+            // Mouse (clicks sobre mapa y marcadores)
             gMapControl1.MouseDown += gMapControl1_MouseDown;
 
             // Cargar marcadores existentes
@@ -107,7 +125,6 @@ namespace MapaTest
             {
                 var pos = gMapControl1.FromLatLngToLocal(marker.Position);
 
-                // pos.X y pos.Y son long → los convertimos a int
                 int x = (int)(pos.X + marker.Offset.X);
                 int y = (int)(pos.Y + marker.Offset.Y);
 
@@ -172,16 +189,16 @@ namespace MapaTest
 
             if (origen == null || destino == null || _markerOrigenConexion == _markerSeleccionado)
             {
-                // No hay origen seleccionado válido → deshabilitar opciones de conexión
                 _mnuPadreDe.Enabled = false;
                 _mnuMadreDe.Enabled = false;
                 _mnuHijoDe.Enabled = false;
                 _mnuHijaDe.Enabled = false;
 
-                _mnuPadreDe.Text = "Seleccione primero una persona origen (clic izquierdo)";
-                _mnuMadreDe.Text = "Seleccione primero una persona origen (clic izquierdo)";
-                _mnuHijoDe.Text = "Seleccione primero una persona origen (clic izquierdo)";
-                _mnuHijaDe.Text = "Seleccione primero una persona origen (clic izquierdo)";
+                string texto = "Haga clic izquierdo en persona origen, luego clic derecho en la persona destino";
+                _mnuPadreDe.Text = texto;
+                _mnuMadreDe.Text = texto;
+                _mnuHijoDe.Text = texto;
+                _mnuHijaDe.Text = texto;
             }
             else
             {
@@ -218,14 +235,12 @@ namespace MapaTest
             {
                 case TipoConexion.PadreDe:
                 case TipoConexion.MadreDe:
-                    // Origen es padre/madre del destino
                     cedPadre = cedOrigen;
                     cedHijo = cedDestino;
                     break;
 
                 case TipoConexion.HijoDe:
                 case TipoConexion.HijaDe:
-                    // Origen es hijo/hija del destino → destino es el padre
                     cedPadre = cedDestino;
                     cedHijo = cedOrigen;
                     break;
@@ -235,8 +250,6 @@ namespace MapaTest
             }
 
             RelacionesFamilia.DefinirPadreHijo(cedPadre, cedHijo);
-
-            // Redibujar todas las conexiones
             RedibujarRelaciones();
         }
 
@@ -251,6 +264,7 @@ namespace MapaTest
 
             RedibujarRelaciones();
             gMapControl1.Refresh();
+            ActualizarDistanciasExtremas();
         }
 
         private void CrearMiembroEn(PointLatLng pt)
@@ -261,6 +275,7 @@ namespace MapaTest
                 AgregarMarkerPersona(frm.PersonaCreada);
                 RedibujarRelaciones();
                 gMapControl1.Refresh();
+                ActualizarDistanciasExtremas();
             }
         }
 
@@ -280,14 +295,25 @@ namespace MapaTest
                 marker = new GMarkerGoogle(new PointLatLng(p.Latitud, p.Longitud), GMarkerGoogleType.blue_pushpin);
             }
 
-            marker.ToolTipText = $"{p.Nombre}\nEdad: {p.Edad}\nParentezco: {p.Parentezco}";
+            string lineaEdad;
+            if (p.EstaVivo)
+            {
+                lineaEdad = $"Edad: {p.Edad} años";
+            }
+            else
+            {
+                string edadF = p.EdadAlFallecer ?? p.Edad;
+                lineaEdad = $"Fallecido a los {edadF} años";
+            }
+
+            marker.ToolTipText =
+                $"{p.Nombre}\n{lineaEdad}\nLatitud: {p.Latitud}\nLongitud: {p.Longitud}";
             marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
             marker.Tag = p.Cedula;
 
             _overlayPersonas.Markers.Add(marker);
         }
 
-        // Helper para crear ícono circular
         private static Bitmap Redondear(Bitmap src, int size)
         {
             var bmp = new Bitmap(size, size);
@@ -305,7 +331,7 @@ namespace MapaTest
         private void gMapControl1_Load(object sender, EventArgs e) { }
         private void gMapControl1_Load_1(object sender, EventArgs e) { }
 
-        // ---- Distancia Haversine (km)
+        // Distancia Haversine (km)
         private static double HaversineKm(PointLatLng a, PointLatLng b)
         {
             const double R = 6371.0088;
@@ -324,7 +350,7 @@ namespace MapaTest
         private static double ToRad(double deg) => deg * Math.PI / 180.0;
         private static double ToDeg(double rad) => rad * 180.0 / Math.PI;
 
-        // ---- Curva gran-círculo (slerp)
+        // Curva gran-círculo (slerp)
         private GMapRoute RutaGranCirculo(PointLatLng a, PointLatLng b, int segmentos = 64)
         {
             double lat1 = ToRad(a.Lat), lon1 = ToRad(a.Lng);
@@ -368,7 +394,6 @@ namespace MapaTest
             return route;
         }
 
-        // ---- Etiqueta en el punto medio
         private class MarkerTexto : GMap.NET.WindowsForms.GMapMarker
         {
             private readonly string _texto;
@@ -385,7 +410,8 @@ namespace MapaTest
             public override void OnRender(Graphics g)
             {
                 var size = g.MeasureString(_texto, _font);
-                var rect = new RectangleF(LocalPosition.X - size.Width / 2f, LocalPosition.Y - size.Height - 6, size.Width + 10, size.Height + 6);
+                var rect = new RectangleF(LocalPosition.X - size.Width / 2f, LocalPosition.Y - size.Height - 6,
+                                          size.Width + 10, size.Height + 6);
                 var rectFill = Rectangle.Round(rect);
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 g.FillRectangle(_bFondo, rectFill);
@@ -424,6 +450,126 @@ namespace MapaTest
             gMapControl1.Refresh();
         }
 
+        private void ActualizarDistanciasExtremas()
+        {
+            if (DatosGlobales.Familia.Count < 2)
+            {
+                lblMinDist.Text = "—";
+                lblMaxDist.Text = "—";
+                lblPromDist.Text = "—";
+                return;
+            }
+
+            CalcularParesDistancia(
+                out string parMin, out double distMin,
+                out string parMax, out double distMax,
+                out double distProm);
+
+            lblMinDist.Text = $"Más cercanos: {parMin} → {distMin:0.00} km";
+            lblMaxDist.Text = $"Más lejanos : {parMax} → {distMax:0.00} km";
+            lblPromDist.Text = $"Promedio   : {distProm:0.00} km";
+        }
+
+        private void CalcularParesDistancia(out string parMin, out double distMin,
+                                            out string parMax, out double distMax,
+                                            out double distProm)
+        {
+            parMin = "";
+            parMax = "";
+            distMin = double.MaxValue;
+            distMax = double.MinValue;
+
+            double sumaDistancias = 0;
+            int totalPares = 0;
+
+            var fam = DatosGlobales.Familia;
+
+            for (int i = 0; i < fam.Count; i++)
+            {
+                var p1 = fam[i];
+                var pt1 = new PointLatLng(p1.Latitud, p1.Longitud);
+
+                for (int j = i + 1; j < fam.Count; j++)
+                {
+                    var p2 = fam[j];
+                    var pt2 = new PointLatLng(p2.Latitud, p2.Longitud);
+
+                    double d = HaversineKm(pt1, pt2);
+
+                    if (d < distMin)
+                    {
+                        distMin = d;
+                        parMin = $"{p1.Nombre} ⇄ {p2.Nombre}";
+                    }
+
+                    if (d > distMax)
+                    {
+                        distMax = d;
+                        parMax = $"{p1.Nombre} ⇄ {p2.Nombre}";
+                    }
+
+                    sumaDistancias += d;
+                    totalPares++;
+                }
+            }
+
+            distProm = (totalPares > 0) ? (sumaDistancias / totalPares) : 0;
+        }
+
+        // ========= NUEVO: DISTANCIAS DESDE UNA PERSONA A TODAS =========
+
+        private void VerDistanciasDesdeSeleccionado()
+        {
+            if (_markerSeleccionado == null)
+                return;
+
+            var cedOrigen = _markerSeleccionado.Tag as string;
+            if (string.IsNullOrWhiteSpace(cedOrigen))
+                return;
+
+            var origen = DatosGlobales.Familia.Find(p => p.Cedula == cedOrigen);
+            if (origen == null)
+                return;
+
+            _overlayDistancias.Routes.Clear();
+            _overlayDistanciasEtiquetas.Markers.Clear();
+
+            var fam = DatosGlobales.Familia;
+            var posOrigen = new PointLatLng(origen.Latitud, origen.Longitud);
+
+            foreach (var destino in fam)
+            {
+                if (destino.Cedula == origen.Cedula)
+                    continue;
+
+                var posDestino = new PointLatLng(destino.Latitud, destino.Longitud);
+
+                var ruta = RutaGranCirculo(posOrigen, posDestino, segmentos: 72);
+                _overlayDistancias.Routes.Add(ruta);
+
+                double km = HaversineKm(posOrigen, posDestino);
+                string label = $"{destino.Nombre}\n{km:0.00} km";
+
+                int mid = Math.Max(0, ruta.Points.Count / 2);
+                var posMid = ruta.Points[mid];
+
+                _overlayDistanciasEtiquetas.Markers.Add(new MarkerTexto(posMid, label));
+            }
+
+            this.Text = $"Mapa Interactivo - Distancias desde {origen.Nombre}";
+            gMapControl1.Refresh();
+        }
+
+        private void LimpiarDistanciasDesdePersona()
+        {
+            _overlayDistancias.Routes.Clear();
+            _overlayDistanciasEtiquetas.Markers.Clear();
+            this.Text = "Mapa Interactivo";
+            gMapControl1.Refresh();
+        }
+
+        // ========= EDITAR / ELIMINAR =========
+
         private void EditarPersonaSeleccionada()
         {
             if (_markerSeleccionado == null) return;
@@ -440,7 +586,6 @@ namespace MapaTest
             frm.CargarParaEdicion(persona);
             if (frm.ShowDialog(this) == DialogResult.OK && frm.PersonaCreada != null)
             {
-                // Actualizar datos de la persona existente
                 persona.Nombre = frm.PersonaCreada.Nombre;
                 persona.FechaNacimiento = frm.PersonaCreada.FechaNacimiento;
                 persona.Edad = frm.PersonaCreada.Edad;
@@ -448,9 +593,12 @@ namespace MapaTest
                 persona.Latitud = frm.PersonaCreada.Latitud;
                 persona.Longitud = frm.PersonaCreada.Longitud;
                 persona.RutaFoto = frm.PersonaCreada.RutaFoto;
+                persona.EstaVivo = frm.PersonaCreada.EstaVivo;
+                persona.FechaDefuncion = frm.PersonaCreada.FechaDefuncion;
+                persona.EdadAlFallecer = frm.PersonaCreada.EdadAlFallecer;
 
-                // Volver a cargar marcadores
                 CargarMarcadoresIniciales();
+                ActualizarDistanciasExtremas();
             }
         }
 
@@ -472,7 +620,6 @@ namespace MapaTest
 
             DatosGlobales.Familia.Remove(persona);
 
-            // Eliminar relaciones donde participa
             RelacionesFamilia.EliminarRelacionesDe(ced);
 
             _overlayPersonas.Markers.Remove(_markerSeleccionado);
@@ -480,10 +627,22 @@ namespace MapaTest
 
             RedibujarRelaciones();
             gMapControl1.Refresh();
+            ActualizarDistanciasExtremas();
+        }
+
+        private void btnGenerarArbol_Click_1(object sender, EventArgs e)
+        {
+            var frm = new FormArbol(
+                DatosGlobales.Familia.ToList(),
+                RelacionesFamilia.Relaciones.ToList()
+            );
+            frm.Show();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
         }
     }
-
-    // ================= RELACIONES FAMILIARES =================
 
     public class RelacionFamiliar
     {
@@ -500,7 +659,6 @@ namespace MapaTest
             if (string.IsNullOrWhiteSpace(cedPadre) || string.IsNullOrWhiteSpace(cedHijo))
                 return;
 
-            // evitar duplicados
             if (!Relaciones.Any(r => r.CedulaPadre == cedPadre && r.CedulaHijo == cedHijo))
             {
                 Relaciones.Add(new RelacionFamiliar
