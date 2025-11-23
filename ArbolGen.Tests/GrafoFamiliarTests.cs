@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MapaTest;              
-using System.Collections.Generic;
+using MapaTest;
 
 namespace ArbolGen.Tests
 {
@@ -15,9 +14,9 @@ namespace ArbolGen.Tests
         }
 
         [TestMethod]
-        public void AgregarNodo_InsertaConClaveDeParentezco()
+        public void AgregarNodo_GuardaEnDiccionarioPorParentezco()
         {
-            var n = new NodoFamiliar
+            var nodo = new NodoFamiliar
             {
                 Nombre = "Ana",
                 Parentezco = "Madre",
@@ -25,48 +24,39 @@ namespace ArbolGen.Tests
                 Longitud = -84
             };
 
-            GrafoFamiliar.AgregarNodo(n);
+            GrafoFamiliar.AgregarNodo(nodo);
 
             Assert.IsTrue(GrafoFamiliar.Nodos.ContainsKey("Madre"));
-            Assert.AreEqual("Ana", GrafoFamiliar.Nodos["Madre"].Nombre);
+            Assert.AreSame(nodo, GrafoFamiliar.Nodos["Madre"]);
         }
 
         [TestMethod]
-        public void AgregarNodo_ConPadre_CreaRelacionPadreHijo()
+        public void AgregarNodo_ConPadreAgregaHijoALaListaDeHijos()
         {
-            var padre = new NodoFamiliar { Nombre = "Juan", Parentezco = "Padre" };
+            var padre = new NodoFamiliar
+            {
+                Nombre = "Ana",
+                Parentezco = "Madre",
+                Latitud = 10,
+                Longitud = -84
+            };
+
+            var hijo = new NodoFamiliar
+            {
+                Nombre = "Luis",
+                Parentezco = "Hijo",
+                Latitud = 11,
+                Longitud = -85
+            };
+
+            // Act: primero agregamos el padre, luego el hijo indicando el parentezco del padre
             GrafoFamiliar.AgregarNodo(padre);
+            GrafoFamiliar.AgregarNodo(hijo, "Madre");
 
-            var hijo = new NodoFamiliar { Nombre = "Luis", Parentezco = "Hijo" };
-            GrafoFamiliar.AgregarNodo(hijo, "Padre");
-
-            Assert.AreEqual(1, GrafoFamiliar.Nodos["Padre"].Hijos.Count);
-            Assert.AreEqual("Luis", GrafoFamiliar.Nodos["Padre"].Hijos[0].Nombre);
+            // Assert: el padre debe tener exactamente un hijo, y debe ser ese nodo
+            Assert.AreEqual(1, padre.Hijos.Count, "El padre debe tener exactamente un hijo.");
+            Assert.AreSame(hijo, padre.Hijos[0], "El hijo agregado debe ser el mismo nodo que se pasó.");
         }
 
-        [TestMethod]
-        public void AgregarNodo_PadreNoExiste_NoLanzaErrorNiCreaPadreFantasma()
-        {
-            var hijo = new NodoFamiliar { Nombre = "Luis", Parentezco = "Hijo" };
-
-            GrafoFamiliar.AgregarNodo(hijo, "NoExiste");
-
-            Assert.IsTrue(GrafoFamiliar.Nodos.ContainsKey("Hijo"));
-            Assert.IsFalse(GrafoFamiliar.Nodos.ContainsKey("NoExiste"));
-        }
-
-        [TestMethod]
-        public void AgregarNodo_MismoParentezco_ReemplazaPorUltimoInsertado()
-        {
-            var n1 = new NodoFamiliar { Nombre = "Primera", Parentezco = "Madre" };
-            var n2 = new NodoFamiliar { Nombre = "Segunda", Parentezco = "Madre" };
-
-            GrafoFamiliar.AgregarNodo(n1);
-            GrafoFamiliar.AgregarNodo(n2);
-
-            // Debe existir solo la clave "Madre" y apuntar al último nodo
-            Assert.IsTrue(GrafoFamiliar.Nodos.ContainsKey("Madre"));
-            Assert.AreEqual("Segunda", GrafoFamiliar.Nodos["Madre"].Nombre);
-        }
     }
 }

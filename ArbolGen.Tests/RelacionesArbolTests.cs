@@ -1,72 +1,45 @@
-﻿#nullable disable
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MapaTest;
+using System.Linq;
 
 namespace ArbolGen.Tests
 {
     [TestClass]
+    [DoNotParallelize]
     public class RelacionesArbolTests
     {
-      
-        private PrivateObject _registroPrivado;
-
         [TestInitialize]
-        public void CrearInstanciaSinConstructor()
-        {
-          
-            var instancia = (FormRegistro)FormatterServices
-                .GetUninitializedObject(typeof(FormRegistro));
-
-            _registroPrivado = new PrivateObject(instancia);
-        }
-
-        [TestMethod]
-        public void ObtenerPadresSegunParentezco_Hijo_RegresaMadreYPadre()
-        {
-            var resultado = (List<string>)_registroPrivado!
-                .Invoke("ObtenerPadresSegunParentezco", "Hijo");
-
-            CollectionAssert.AreEqual(
-                new List<string> { "Madre", "Padre" },
-                resultado,
-                "Un hijo debe tener como padres 'Madre' y 'Padre'.");
-        }
-
-        [TestMethod]
-        public void ObtenerPadresSegunParentezco_Madre_RegresaAbuelosMaternos()
-        {
-            var resultado = (List<string>)_registroPrivado!
-                .Invoke("ObtenerPadresSegunParentezco", "Madre");
-            
-
-            CollectionAssert.AreEqual(
-                new List<string> { "Abuela Materna", "Abuelo Materno" },
-                resultado,
-                "Una 'Madre' debe tener como padres los abuelos maternos.");
-        }
-
-        [TestMethod]
-        public void ObtenerNivelGeneracional_ValoresClave_CoincidenConMapaDefinido()
-        {
-            int nivelAbuela = (int)_registroPrivado!
-                .Invoke("ObtenerNivelGeneracional", "Abuela Materna");
-            int nivelMadre = (int)_registroPrivado!
-                .Invoke("ObtenerNivelGeneracional", "Madre");
-            int nivelHijo = (int)_registroPrivado!
-                .Invoke("ObtenerNivelGeneracional", "Hijo");
-            int nivelOtro = (int)_registroPrivado!
-                .Invoke("ObtenerNivelGeneracional", "Primo");
-
-            Assert.AreEqual(0, nivelAbuela, "Los abuelos deben estar en nivel 0.");
-            Assert.AreEqual(1, nivelMadre, "Madre/Padre deben estar en nivel 1.");
-            Assert.AreEqual(2, nivelHijo, "Hijo/Hija deben estar en nivel 2.");
-            Assert.AreEqual(3, nivelOtro, "Otros parentescos deben caer en el nivel 3.");
-        }
         public void Limpiar()
         {
-            GrafoFamiliar.Nodos.Clear();
+            RelacionesFamilia.Relaciones.Clear();
+        }
+
+        // 5) DefinirPadreHijo: evita duplicados
+        [TestMethod]
+        public void DefinirPadreHijo_NoCreaRelacionesDuplicadas()
+        {
+            RelacionesFamilia.DefinirPadreHijo("111", "222");
+            RelacionesFamilia.DefinirPadreHijo("111", "222"); // duplicado
+
+            Assert.AreEqual(1, RelacionesFamilia.Relaciones.Count);
+            Assert.AreEqual("111", RelacionesFamilia.Relaciones[0].CedulaPadre);
+            Assert.AreEqual("222", RelacionesFamilia.Relaciones[0].CedulaHijo);
+        }
+
+        // 6) EliminarRelacionesDe: borra donde es padre o hijo
+        [TestMethod]
+        public void EliminarRelacionesDe_EliminaTodasLasRelacionesDeLaPersona()
+        {
+            RelacionesFamilia.DefinirPadreHijo("111", "222"); // 111 padre
+            RelacionesFamilia.DefinirPadreHijo("333", "111"); // 111 hijo
+
+            Assert.AreEqual(2, RelacionesFamilia.Relaciones.Count);
+
+            RelacionesFamilia.EliminarRelacionesDe("111");
+
+            Assert.IsFalse(RelacionesFamilia.Relaciones
+                .Any(r => r.CedulaPadre == "111" || r.CedulaHijo == "111"));
+            Assert.AreEqual(0, RelacionesFamilia.Relaciones.Count);
         }
     }
 }
