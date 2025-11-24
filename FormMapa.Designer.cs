@@ -35,6 +35,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnGenerarArbol = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnVolverInicio = new System.Windows.Forms.Button();
             this.groupBoxStats.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -85,7 +86,7 @@
             this.groupBoxStats.ForeColor = System.Drawing.Color.White;
             this.groupBoxStats.Location = new System.Drawing.Point(12, 553);
             this.groupBoxStats.Name = "groupBoxStats";
-            this.groupBoxStats.Size = new System.Drawing.Size(1011, 154);
+            this.groupBoxStats.Size = new System.Drawing.Size(1000, 154);
             this.groupBoxStats.TabIndex = 3;
             this.groupBoxStats.TabStop = false;
             this.groupBoxStats.Text = "Estadísticas";
@@ -191,16 +192,28 @@
             this.pictureBox1.Image = global::WindowsFormsApp1.Properties.Resources.ImagenArbol;
             this.pictureBox1.Location = new System.Drawing.Point(1053, 417);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(287, 290);
+            this.pictureBox1.Size = new System.Drawing.Size(276, 290);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
+            // btnVolverInicio
+            // 
+            this.btnVolverInicio.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVolverInicio.Location = new System.Drawing.Point(1074, 433);
+            this.btnVolverInicio.Name = "btnVolverInicio";
+            this.btnVolverInicio.Size = new System.Drawing.Size(235, 23);
+            this.btnVolverInicio.TabIndex = 10;
+            this.btnVolverInicio.Text = "Volver a Instrucciones iniciales";
+            this.btnVolverInicio.UseVisualStyleBackColor = true;
+            this.btnVolverInicio.Click += new System.EventHandler(this.btnVolverInicio_Click);
+            // 
             // FormMapa
             // 
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1381, 719);
+            this.ClientSize = new System.Drawing.Size(1370, 719);
+            this.Controls.Add(this.btnVolverInicio);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -231,5 +244,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnGenerarArbol;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button btnVolverInicio;
     }
 }

@@ -14,6 +14,7 @@ namespace MapaTest
 {
     public partial class FormMapa : Form
     {
+        private FormArbol _formArbol;
         private GMapOverlay _overlayRutas;
         private GMapOverlay _overlayEtiquetas;
 
@@ -640,15 +641,54 @@ namespace MapaTest
 
         private void btnGenerarArbol_Click_1(object sender, EventArgs e)
         {
-            var frm = new FormArbol(
-                DatosGlobales.Familia.ToList(),
-                RelacionesFamilia.Relaciones.ToList()
-            );
-            frm.Show();
+            var personas = DatosGlobales.Familia.ToList();
+            var relaciones = RelacionesFamilia.Relaciones.ToList();
+
+            // Si ya existe una ventana de árbol y no está destruida, solo actualizamos y la traemos al frente
+            if (_formArbol != null && !_formArbol.IsDisposed)
+            {
+                _formArbol.ActualizarDatos(personas, relaciones);
+                _formArbol.WindowState = FormWindowState.Normal;
+                _formArbol.BringToFront();
+                _formArbol.Activate();
+                return;
+            }
+
+            // Crear una nueva instancia y guardarla en el campo
+            _formArbol = new FormArbol(personas, relaciones)
+            {
+                StartPosition = FormStartPosition.CenterParent
+            };
+
+            // Importante: pasamos this como owner para que no “se pierda” detrás
+            _formArbol.Show(this);
         }
+
+
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
+        }
+
+        private void btnVolverInicio_Click(object sender, EventArgs e)
+        {
+            var principal = Application.OpenForms
+             .OfType<FormPrincipal>()
+             .FirstOrDefault();
+
+            if (principal == null)
+            {
+                // Por si acaso no existiera, se crea uno nuevo
+                principal = new FormPrincipal();
+            }
+
+            // Mostrar la pantalla inicial
+            principal.Show();
+            principal.WindowState = FormWindowState.Normal;
+            principal.BringToFront();
+
+            // Cerrar el mapa actual (la app NO se cierra porque el principal sigue vivo)
+            this.Close();
         }
     }
 

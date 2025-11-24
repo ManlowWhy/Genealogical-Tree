@@ -1,7 +1,16 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\gabs.dns\\source\\repos\\Genealogical-Tree\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main1111\\Genealogical-Tree-main\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|c:\\users\\olman\\downloads\\genealogical-tree-main1111\\genealogical-tree-main\\formmapa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|solutionrelative:formmapa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|c:\\users\\olman\\downloads\\genealogical-tree-main1111\\genealogical-tree-main\\formmapa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3904281A-1CF3-47A1-8F8B-C97AA2176B61}|MapaTest.csproj|solutionrelative:formmapa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,29 +18,36 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 939,
-          "SelectedChildIndex": -1,
-          "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{a80febb4-e7e0-4147-b476-21aaf2453969}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FormMapa.cs",
+              "DocumentMoniker": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main1111\\Genealogical-Tree-main\\FormMapa.cs",
+              "RelativeDocumentMoniker": "FormMapa.cs",
+              "ToolTip": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main1111\\Genealogical-Tree-main\\FormMapa.cs",
+              "RelativeToolTip": "FormMapa.cs",
+              "ViewState": "AgIAAJUCAAAAAAAAAAAqwKgCAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-24T06:50:06.264Z",
+              "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FormMapa.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main1111\\Genealogical-Tree-main\\FormMapa.cs",
+              "RelativeDocumentMoniker": "FormMapa.cs",
+              "ToolTip": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main1111\\Genealogical-Tree-main\\FormMapa.cs [Dise\u00F1o]",
+              "RelativeToolTip": "FormMapa.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-24T06:48:05.063Z",
+              "EditorCaption": " [Dise\u00F1o]"
             }
           ]
         }

@@ -25,6 +25,17 @@ namespace MapaTest
             picArbol.Paint += PicArbol_Paint;
         }
 
+        public void ActualizarDatos(List<Persona> listaPersonas, List<RelacionFamilia> listaRelaciones)
+        {
+            personas = listaPersonas;
+            relaciones = listaRelaciones;
+
+            ConstruirArbolLogico();
+            CalcularPosiciones();
+            picArbol.Invalidate(); // Forzar repintado
+        }
+
+
         private Panel pnlScroll;
         private PictureBox picArbol;
 
@@ -155,6 +166,8 @@ namespace MapaTest
             foreach (var r in raices)
                 DibujarNodo(g, r);
         }
+
+
 
         private void DibujarNodo(Graphics g, NodoArbol nodo)
         {
