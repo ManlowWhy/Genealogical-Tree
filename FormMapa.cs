@@ -618,17 +618,25 @@ namespace MapaTest
 
             if (r != DialogResult.Yes) return;
 
+            // 1. Eliminar de la lista global
             DatosGlobales.Familia.Remove(persona);
 
-            RelacionesFamilia.EliminarRelacionesDe(ced);
+            // 2. Eliminar todas las relaciones de esa persona
+            RelacionesFamilia.EliminarRelacionesDePersona(ced);
 
+            // 3. Eliminar también el nodo del grafo
+            DatosGlobales.Grafo.EliminarPersona(ced);
+
+            // 4. Quitar el marcador del mapa
             _overlayPersonas.Markers.Remove(_markerSeleccionado);
             _markerSeleccionado = null;
 
+            // 5. Redibujar
             RedibujarRelaciones();
             gMapControl1.Refresh();
             ActualizarDistanciasExtremas();
         }
+
 
         private void btnGenerarArbol_Click_1(object sender, EventArgs e)
         {
@@ -644,7 +652,7 @@ namespace MapaTest
         }
     }
 
-    public class RelacionFamiliar
+    public class RelacionFamilia
     {
         public string CedulaPadre { get; set; }
         public string CedulaHijo { get; set; }
@@ -652,26 +660,68 @@ namespace MapaTest
 
     public static class RelacionesFamilia
     {
-        public static readonly List<RelacionFamiliar> Relaciones = new List<RelacionFamiliar>();
+        // Lista global de relaciones padre–hijo
+        public static List<RelacionFamilia> Relaciones { get; } = new List<RelacionFamilia>();
 
-        public static void DefinirPadreHijo(string cedPadre, string cedHijo)
+        /// <summary>
+        /// Define una relación padre/madre -> hijo en la estructura lógica
+        /// Y también conecta esas dos personas en el grafo.
+        /// </summary>
+        public static void DefinirPadreHijo(string cedulaPadre, string cedulaHijo)
         {
-            if (string.IsNullOrWhiteSpace(cedPadre) || string.IsNullOrWhiteSpace(cedHijo))
+            if (string.IsNullOrWhiteSpace(cedulaPadre) || string.IsNullOrWhiteSpace(cedulaHijo))
                 return;
 
-            if (!Relaciones.Any(r => r.CedulaPadre == cedPadre && r.CedulaHijo == cedHijo))
+            if (cedulaPadre == cedulaHijo)
+                return; // no tiene sentido que alguien sea padre de sí mismo
+
+            // Evitar duplicados
+            bool yaExiste = Relaciones.Any(r =>
+                r.CedulaPadre == cedulaPadre &&
+                r.CedulaHijo == cedulaHijo);
+
+            if (!yaExiste)
             {
-                Relaciones.Add(new RelacionFamiliar
+                Relaciones.Add(new RelacionFamilia
                 {
-                    CedulaPadre = cedPadre,
-                    CedulaHijo = cedHijo
+                    CedulaPadre = cedulaPadre,
+                    CedulaHijo = cedulaHijo
                 });
             }
+
+            // === AQUÍ SE CONECTA TAMBIÉN EN EL GRAFO ===
+            DatosGlobales.Grafo.Conectar(cedulaPadre, cedulaHijo);
         }
 
-        public static void EliminarRelacionesDe(string cedPersona)
+        /// <summary>
+        /// Elimina una relación padre–hijo específica
+        /// y desconecta esas personas en el grafo.
+        /// </summary>
+        public static void EliminarRelacion(string cedulaPadre, string cedulaHijo)
         {
-            Relaciones.RemoveAll(r => r.CedulaPadre == cedPersona || r.CedulaHijo == cedPersona);
+            Relaciones.RemoveAll(r =>
+                r.CedulaPadre == cedulaPadre &&
+                r.CedulaHijo == cedulaHijo);
+
+            DatosGlobales.Grafo.Desconectar(cedulaPadre, cedulaHijo);
+        }
+
+        /// <summary>
+        /// Elimina todas las relaciones donde participa una persona
+        /// y también limpia esas conexiones en el grafo.
+        /// </summary>
+        public static void EliminarRelacionesDePersona(string cedulaPersona)
+        {
+            var aEliminar = Relaciones
+                .Where(r => r.CedulaPadre == cedulaPersona || r.CedulaHijo == cedulaPersona)
+                .ToList();
+
+            foreach (var rel in aEliminar)
+            {
+                DatosGlobales.Grafo.Desconectar(rel.CedulaPadre, rel.CedulaHijo);
+            }
+
+            Relaciones.RemoveAll(r => r.CedulaPadre == cedulaPersona || r.CedulaHijo == cedulaPersona);
         }
     }
 }

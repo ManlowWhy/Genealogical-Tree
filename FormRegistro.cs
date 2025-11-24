@@ -344,14 +344,16 @@ namespace MapaTest
                 edadEntera = edadManual;
             }
 
-            if (!double.TryParse(textBoxLatitud.Text, NumberStyles.Any, culture, out double latitudValida) ||
+            var cultureNum = CultureInfo.InvariantCulture;
+
+            if (!double.TryParse(textBoxLatitud.Text, NumberStyles.Any, cultureNum, out double latitudValida) ||
                 latitudValida < -90 || latitudValida > 90)
             {
                 MessageBox.Show("Ingrese una Latitud válida en [-90, 90] (use '.' como separador decimal).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBoxLatitud.Focus(); return;
             }
 
-            if (!double.TryParse(textBoxLongitud.Text, NumberStyles.Any, culture, out double longitudValida) ||
+            if (!double.TryParse(textBoxLongitud.Text, NumberStyles.Any, cultureNum, out double longitudValida) ||
                 longitudValida < -180 || longitudValida > 180)
             {
                 MessageBox.Show("Ingrese una Longitud válida en [-180, 180] (use '.' como separador decimal).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -380,19 +382,13 @@ namespace MapaTest
                 EdadAlFallecer = estaVivo ? null : edadEntera.ToString("F0", culture)
             };
 
-            var nodo = new NodoFamiliar
-            {
-                Nombre = persona.Nombre,
-                Parentezco = persona.Parentezco,
-                Latitud = persona.Latitud,
-                Longitud = persona.Longitud
-            };
+            // === NUEVO: agregar la persona al grafo manual ===
+            DatosGlobales.Grafo.AgregarPersona(persona);
 
-            List<string> padres = ObtenerPadresSegunParentezco(persona.Parentezco);
-
-            GrafoFamiliar.AgregarNodo(nodo);
+            // Lista global de personas
             DatosGlobales.Familia.Add(persona);
 
+            // Redibujar el arbol del panel
             DibujarArbol();
 
             PersonaCreada = persona;

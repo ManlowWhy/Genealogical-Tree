@@ -10,10 +10,10 @@ namespace MapaTest
     public partial class FormArbol : Form
     {
         private List<Persona> personas;
-        private List<RelacionFamiliar> relaciones;
+        private List<RelacionFamilia> relaciones;
         private List<NodoArbol> raices;
 
-        public FormArbol(List<Persona> listaPersonas, List<RelacionFamiliar> listaRelaciones)
+        public FormArbol(List<Persona> listaPersonas, List<RelacionFamilia> listaRelaciones)
         {
             InitializeComponent();
             personas = listaPersonas;
