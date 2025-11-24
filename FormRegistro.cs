@@ -287,8 +287,10 @@ namespace MapaTest
 
             string cedulaIngresada = textBoxCedula.Text.Trim();
 
-            // Evitar cédula duplicada (solo al crear nueva, no al editar)
-            bool esEdicion = DatosGlobales.Familia.Any(p => p.Cedula == cedulaIngresada && p == PersonaCreada);
+            // Estamos en modo edición si PersonaCreada NO es null
+            bool esEdicion = PersonaCreada != null;
+
+            // Si estoy creando y ya existe esa cédula → error
             if (!esEdicion && DatosGlobales.Familia.Any(p => p.Cedula == cedulaIngresada))
             {
                 MessageBox.Show("Ya existe un familiar con esta cédula. Ingrese una diferente.",
@@ -296,6 +298,16 @@ namespace MapaTest
                 textBoxCedula.Focus();
                 return;
             }
+
+            // Si estoy editando y la cédula coincide con la de OTRA persona → error
+            if (esEdicion && DatosGlobales.Familia.Any(p => p != PersonaCreada && p.Cedula == cedulaIngresada))
+            {
+                MessageBox.Show("Ya existe otro familiar con esta cédula. Ingrese una diferente.",
+                    "Cédula duplicada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxCedula.Focus();
+                return;
+            }
+
 
             DateTime fechaNacimientoValida = dtpNacimiento.Value;
             if (fechaNacimientoValida > DateTime.Today)
@@ -367,31 +379,65 @@ namespace MapaTest
                 if (r == DialogResult.No) { textBoxRutaFoto.Focus(); return; }
             }
 
-            var persona = new Persona
+            Persona persona;
+
+            if (esEdicion && PersonaCreada != null)
             {
-                Nombre = textBoxNombre.Text.Trim(),
-                Cedula = cedulaIngresada,
-                FechaNacimiento = fechaNacimientoValida.ToString("yyyy-MM-dd"),
-                Edad = edadEntera.ToString("F0", culture),
-                Parentezco = "", // ahora se manejan relaciones aparte
-                Latitud = latitudValida,
-                Longitud = longitudValida,
-                RutaFoto = textBoxRutaFoto.Text.Trim(),
-                EstaVivo = estaVivo,
-                FechaDefuncion = fechaDefuncionValida?.ToString("yyyy-MM-dd"),
-                EdadAlFallecer = estaVivo ? null : edadEntera.ToString("F0", culture)
-            };
+                // 👉 MODO EDICIÓN: actualizamos el OBJETO existente
+                persona = PersonaCreada;
 
-            // === NUEVO: agregar la persona al grafo manual ===
-            DatosGlobales.Grafo.AgregarPersona(persona);
+                persona.Nombre = textBoxNombre.Text.Trim();
+                persona.Cedula = cedulaIngresada; // en la práctica no cambia porque el textBox está ReadOnly
+                persona.FechaNacimiento = fechaNacimientoValida.ToString("yyyy-MM-dd");
+                persona.Edad = edadEntera.ToString("F0", culture);
+                persona.Parentezco = ""; // se siguen manejando relaciones aparte
+                persona.Latitud = latitudValida;
+                persona.Longitud = longitudValida;
+                persona.RutaFoto = textBoxRutaFoto.Text.Trim();
+                persona.EstaVivo = estaVivo;
+                persona.FechaDefuncion = fechaDefuncionValida?.ToString("yyyy-MM-dd");
+                persona.EdadAlFallecer = estaVivo ? null : edadEntera.ToString("F0", culture);
 
-            // Lista global de personas
-            DatosGlobales.Familia.Add(persona);
+                // IMPORTANTE: NO se vuelve a agregar a DatosGlobales.Familia ni al grafo
+            }
+            else
+            {
+                // 👉 MODO ALTA NUEVA: creamos y agregamos
+                persona = new Persona
+                {
+                    Nombre = textBoxNombre.Text.Trim(),
+                    Cedula = cedulaIngresada,
+                    FechaNacimiento = fechaNacimientoValida.ToString("yyyy-MM-dd"),
+                    Edad = edadEntera.ToString("F0", culture),
+                    Parentezco = "", // ahora se manejan relaciones aparte
+                    Latitud = latitudValida,
+                    Longitud = longitudValida,
+                    RutaFoto = textBoxRutaFoto.Text.Trim(),
+                    EstaVivo = estaVivo,
+                    FechaDefuncion = fechaDefuncionValida?.ToString("yyyy-MM-dd"),
+                    EdadAlFallecer = estaVivo ? null : edadEntera.ToString("F0", culture)
+                };
 
-            // Redibujar el arbol del panel
+                // Agregar al grafo y a la lista global
+                DatosGlobales.Grafo.AgregarPersona(persona);
+                DatosGlobales.Familia.Add(persona);
+            }
+
+            // Redibujar el árbol del panel
             DibujarArbol();
 
+            // Devolvemos al que llamó la persona final (nueva o editada)
             PersonaCreada = persona;
+
+            if (CloseOnSave || this.Modal)
+            {
+                DialogResult = DialogResult.OK;
+                return;
+            }
+
+            MessageBox.Show(esEdicion
+                ? "Información actualizada correctamente."
+                : "Familiar agregado correctamente.");
 
             if (CloseOnSave || this.Modal)
             {
@@ -467,6 +513,13 @@ namespace MapaTest
         public void CargarParaEdicion(Persona p)
         {
             if (p == null) return;
+
+            PersonaCreada = p;
+
+            // (opcional, pero recomendable)
+            textBoxCedula.ReadOnly = true;
+            buttonAgregarFamiliar.Text = "Guardar cambios";
+
 
             textBoxNombre.Text = p.Nombre;
             textBoxCedula.Text = p.Cedula;
