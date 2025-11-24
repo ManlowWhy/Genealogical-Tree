@@ -25,7 +25,7 @@ namespace ArbolGen.Tests
                 .GetUninitializedObject(typeof(FormRegistro));
             _registroInstancia = new PrivateObject(instancia);
 
-            // Limpiar el grafo global para que cada prueba empiece sin conexiones.
+            // Limpiar el grafo global 
             var grafo = DatosGlobales.Grafo;
             var cedulas = grafo.Nodos.Keys.ToList();
             foreach (var ced in cedulas)
@@ -34,34 +34,30 @@ namespace ArbolGen.Tests
             }
         }
 
-        /// <summary>
-        /// Verifica que, para una persona fallecida, la edad se calcule
-        /// usando la fecha de defunción y no la fecha actual.
-        /// </summary>
+
+        //Verifica que para una persona fallecida la edad se calcule
         [TestMethod]
         public void CalcularEdad_PersonaFallecida_UsaFechaDefuncion()
         {
-            // Arrange
-            var nacimiento = new DateTime(1980, 1, 1);
-            var fallecimiento = new DateTime(2020, 1, 1); // 40 años
 
-            // Act
+            var nacimiento = new DateTime(1980, 1, 1);
+            var fallecimiento = new DateTime(2020, 1, 1); 
+
+
             int edad = (int)_registroStatic.InvokeStatic(
                 "CalcularEdad",
                 new object[] { nacimiento, fallecimiento });
 
-            // Assert
+
             Assert.AreEqual(40, edad);
         }
 
-        /// <summary>
-        /// Verifica que el método privado ObtenerPadresSegunParentezco
-        /// devuelva "Madre" y "Padre" cuando el parentezco es "Hijo".
-        /// </summary>
+
+        //Verifica que el método privado ObtenerPadresSegunParentezco devuelva Madre y Padre para Hijo
         [TestMethod]
         public void ObtenerPadresSegunParentezco_Hijo_RegresaMadreYPadre()
         {
-            // Act
+
             var padres = (List<string>)_registroInstancia.Invoke(
                 "ObtenerPadresSegunParentezco",
                 new object[] { "Hijo" });

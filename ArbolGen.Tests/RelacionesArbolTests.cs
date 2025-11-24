@@ -14,13 +14,13 @@ namespace ArbolGen.Tests
             RelacionesFamilia.Relaciones.Clear();
         }
 
-        // 1) DefinirPadreHijo: evita duplicados
+        // 1) DefinirPadreHijo
         [TestMethod]
         public void DefinirPadreHijo_NoCreaRelacionesDuplicadas()
         {
-            // Arrange + Act: se intenta registrar la misma relación dos veces
+   
             RelacionesFamilia.DefinirPadreHijo("111", "222");
-            RelacionesFamilia.DefinirPadreHijo("111", "222"); // duplicado
+            RelacionesFamilia.DefinirPadreHijo("111", "222"); 
 
             // Assert
             Assert.AreEqual(1, RelacionesFamilia.Relaciones.Count);
@@ -28,21 +28,21 @@ namespace ArbolGen.Tests
             Assert.AreEqual("222", RelacionesFamilia.Relaciones[0].CedulaHijo);
         }
 
-        // 2) EliminarRelacionesDePersona: borra donde es padre o hijo
+        // 2) EliminarRelacionesDePersona
         [TestMethod]
         public void EliminarRelacionesDePersona_EliminaTodasLasRelacionesDeLaPersona()
         {
-            // Arrange: 111 aparece una vez como padre y otra como hijo
-            RelacionesFamilia.DefinirPadreHijo("111", "222"); // 111 como padre
-            RelacionesFamilia.DefinirPadreHijo("333", "111"); // 111 como hijo
+            // Aparece como padre y otra como hijo
+            RelacionesFamilia.DefinirPadreHijo("111", "222"); 
+            RelacionesFamilia.DefinirPadreHijo("333", "111"); 
 
             Assert.AreEqual(2, RelacionesFamilia.Relaciones.Count,
                 "Antes de eliminar debe haber dos relaciones registradas.");
 
-            // Act
+
             RelacionesFamilia.EliminarRelacionesDePersona("111");
 
-            // Assert: ninguna relación debe contener a 111 y la lista queda vacía
+            // Ninguna relación debe contener a 111 
             Assert.IsFalse(RelacionesFamilia.Relaciones
                 .Any(r => r.CedulaPadre == "111" || r.CedulaHijo == "111"));
             Assert.AreEqual(0, RelacionesFamilia.Relaciones.Count);

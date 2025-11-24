@@ -32,7 +32,7 @@ namespace MapaTest
 
             ConstruirArbolLogico();
             CalcularPosiciones();
-            picArbol.Invalidate(); // Forzar repintado
+            picArbol.Invalidate(); 
         }
 
 

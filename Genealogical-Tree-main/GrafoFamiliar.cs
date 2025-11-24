@@ -3,42 +3,30 @@ using System.Collections.Generic;
 
 namespace MapaTest
 {
-    /// <summary>
-    /// Grafo familiar implementado a mano.
-    /// Usa un diccionario de cédula -> NodoFamiliar y
-    /// listas de adyacencia para las conexiones.
-    /// </summary>
+
     public class GrafoFamiliar
     {
         // Diccionario interno de nodos
         private readonly Dictionary<string, NodoFamiliar> _nodos
             = new Dictionary<string, NodoFamiliar>();
 
-        /// <summary>
-        /// Acceso de solo lectura a los nodos del grafo.
-        /// </summary>
         public IReadOnlyDictionary<string, NodoFamiliar> Nodos => _nodos;
 
-        /// <summary>
-        /// Agrega una persona como nodo del grafo.
-        /// Si ya existe un nodo con esa cédula, no hace nada.
-        /// </summary>
+
+        // Agrega una persona como nodo del grafo Si ya existe un nodo con esa cédula, no hace nada
+
         public void AgregarPersona(Persona persona)
         {
             if (persona == null) throw new ArgumentNullException(nameof(persona));
             if (string.IsNullOrWhiteSpace(persona.Cedula)) return;
 
             if (_nodos.ContainsKey(persona.Cedula))
-                return; // Ya existe
+                return; 
 
             var nodo = new NodoFamiliar(persona);
             _nodos.Add(persona.Cedula, nodo);
         }
 
-        /// <summary>
-        /// Elimina una persona (por cédula) del grafo.
-        /// También la elimina de las listas de vecinos de los demás.
-        /// </summary>
         public void EliminarPersona(string cedula)
         {
             if (string.IsNullOrWhiteSpace(cedula)) return;
@@ -56,11 +44,8 @@ namespace MapaTest
             _nodos.Remove(cedula);
         }
 
-        /// <summary>
-        /// Conecta dos personas como vecinas (relación en el grafo).
-        /// Útil para padre-hijo, madre-hijo, etc.
-        /// La conexión es no dirigida (bidireccional).
-        /// </summary>
+
+        // Conecta dos personas como vecinas 
         public void Conectar(string cedulaA, string cedulaB)
         {
             if (string.IsNullOrWhiteSpace(cedulaA) || string.IsNullOrWhiteSpace(cedulaB))
@@ -79,9 +64,7 @@ namespace MapaTest
                 nodoB.Vecinos.Add(cedulaA);
         }
 
-        /// <summary>
-        /// Desconecta dos personas (si están conectadas) en el grafo.
-        /// </summary>
+
         public void Desconectar(string cedulaA, string cedulaB)
         {
             if (string.IsNullOrWhiteSpace(cedulaA) || string.IsNullOrWhiteSpace(cedulaB))
@@ -93,11 +76,9 @@ namespace MapaTest
             if (_nodos.TryGetValue(cedulaB, out var nodoB))
                 nodoB.Vecinos.Remove(cedulaA);
         }
+        //Recorrido BFS 
+        // Devuelve la lista de personas visitadas
 
-        /// <summary>
-        /// Ejemplo de recorrido BFS desde una cédula.
-        /// Devuelve la lista de personas visitadas.
-        /// </summary>
         public List<Persona> BfsDesde(string cedulaInicio)
         {
             var resultado = new List<Persona>();

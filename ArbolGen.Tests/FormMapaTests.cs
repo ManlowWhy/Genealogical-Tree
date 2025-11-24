@@ -8,7 +8,7 @@ namespace ArbolGen.Tests
     [TestClass]
     public class FormMapaTests
     {
-        // 7) HaversineKm: 1° de latitud en el ecuador ≈ 111.19 km
+        // 7) HaversineKm
         [TestMethod]
         public void HaversineKm_UnGradoLatitudEnEcuador_Aprox111Km()
         {
@@ -25,7 +25,7 @@ namespace ArbolGen.Tests
                 $"Distancia esperada ~111.2 km, fue {d} km");
         }
 
-        // 8) ToRad: 180° → π radianes
+        // 8) ToRad
         [TestMethod]
         public void ToRad_180Grados_EsPiRadianes()
         {

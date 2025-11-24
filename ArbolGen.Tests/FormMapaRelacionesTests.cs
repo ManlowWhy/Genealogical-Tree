@@ -6,7 +6,7 @@ using System.Linq;
 namespace ArbolGen.Tests
 {
     [TestClass]
-    [DoNotParallelize]  // usa listas estáticas (Familia, Relaciones)
+    [DoNotParallelize] 
     public class FormMapaRelacionesTests
     {
         [TestInitialize]
@@ -19,7 +19,7 @@ namespace ArbolGen.Tests
         [TestMethod]
         public void RedibujarRelaciones_CreaUnaRutaYUnaEtiquetaPorRelacionValida()
         {
-            // ARRANGE: 2 personas con coordenadas y una relación padre–hijo
+            // 2 personas con coordenadas y una relación padre–hijo
             var padre = new Persona
             {
                 Cedula = "111",
@@ -41,21 +41,19 @@ namespace ArbolGen.Tests
 
             RelacionesFamilia.DefinirPadreHijo("111", "222");
 
-            // Instanciar el mapa (inicializa overlays y carga marcadores)
+            // Instanciar el mapa 
             using var frm = new FormMapa();
             var acceso = new PrivateObject(frm);
 
-            // ACT: forzamos el redibujado de las relaciones
             acceso.Invoke("RedibujarRelaciones", new object[] { });
 
-            // Obtenemos los overlays como dynamic para no depender de GMapOverlay
             dynamic overlayRutas = acceso.GetField("_overlayRutas");
             dynamic overlayEtiquetas = acceso.GetField("_overlayEtiquetas");
 
             int rutasCount = overlayRutas.Routes.Count;
             int etiquetasCount = overlayEtiquetas.Markers.Count;
 
-            // ASSERT: una ruta y una etiqueta por la única relación válida
+            // Assert
             Assert.AreEqual(1, rutasCount,
                 "Debe existir exactamente una ruta por la relación padre–hijo registrada.");
 

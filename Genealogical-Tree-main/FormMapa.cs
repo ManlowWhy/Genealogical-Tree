@@ -18,7 +18,7 @@ namespace MapaTest
         private GMapOverlay _overlayRutas;
         private GMapOverlay _overlayEtiquetas;
 
-        // estilo de líneas
+
         private readonly Pen _penRuta = new Pen(Color.FromArgb(180, 33, 150, 243), 2f)
         {
             StartCap = System.Drawing.Drawing2D.LineCap.Round,
@@ -28,7 +28,7 @@ namespace MapaTest
 
         private GMapOverlay _overlayPersonas;
 
-        // NUEVO: overlays para distancias desde una persona
+        // Distancias desde una persona
         private GMapOverlay _overlayDistancias;
         private GMapOverlay _overlayDistanciasEtiquetas;
 
@@ -39,7 +39,7 @@ namespace MapaTest
         private GMapMarker _markerSeleccionado;
         private GMapMarker _markerOrigenConexion; // persona A
 
-        // ítems del menú de conexión
+
         private ToolStripMenuItem _mnuPadreDe;
         private ToolStripMenuItem _mnuMadreDe;
         private ToolStripMenuItem _mnuHijoDe;
@@ -62,8 +62,8 @@ namespace MapaTest
         private void InicializarMapa()
         {
             // Configuración básica del mapa
-            gMapControl1.MapProvider = GMapProviders.OpenStreetMap;   // Mapa libre
-            GMaps.Instance.Mode = AccessMode.ServerAndCache;          // Cache local
+            gMapControl1.MapProvider = GMapProviders.OpenStreetMap;   
+            GMaps.Instance.Mode = AccessMode.ServerAndCache;          
             gMapControl1.Position = new PointLatLng(9.936, -84.09);   // Centro CR por defecto
             gMapControl1.MinZoom = 2;
             gMapControl1.MaxZoom = 20;
@@ -80,18 +80,18 @@ namespace MapaTest
             gMapControl1.Overlays.Add(_overlayRutas);
             gMapControl1.Overlays.Add(_overlayEtiquetas);
 
-            // NUEVO: overlays de distancias desde persona
+            // Overlays distancias
             _overlayDistancias = new GMapOverlay("distancias");
             _overlayDistanciasEtiquetas = new GMapOverlay("distancias_etiquetas");
             gMapControl1.Overlays.Add(_overlayDistancias);
             gMapControl1.Overlays.Add(_overlayDistanciasEtiquetas);
 
-            // MENÚ PARA EL MAPA (click derecho en lugar vacío)
+            // Menu mapa
             _ctxMapa = new ContextMenuStrip();
             _ctxMapa.Items.Add("Nuevo miembro aquí", null, (s, e) => CrearMiembroEn(_lastClickPoint));
             _ctxMapa.Items.Add("Ocultar distancias", null, (s, e) => LimpiarDistanciasDesdePersona());
 
-            // MENÚ PARA LOS MARCADORES (click derecho en una persona)
+            // Menu marcadores
             _ctxMarker = new ContextMenuStrip();
 
             _mnuPadreDe = new ToolStripMenuItem("", null, (s, e) => ConectarOrigenDestino(TipoConexion.PadreDe));
@@ -112,14 +112,14 @@ namespace MapaTest
             _ctxMarker.Items.Add("Editar", null, (s, e) => EditarPersonaSeleccionada());
             _ctxMarker.Items.Add("Eliminar", null, (s, e) => EliminarPersonaSeleccionada());
 
-            // Mouse (clicks sobre mapa y marcadores)
+           
             gMapControl1.MouseDown += gMapControl1_MouseDown;
 
-            // Cargar marcadores existentes
+
             CargarMarcadoresIniciales();
         }
 
-        // Detectar si el click cayó sobre algún marcador
+
         private GMapMarker GetMarkerAt(Point pt)
         {
             foreach (var marker in _overlayPersonas.Markers)
@@ -143,7 +143,7 @@ namespace MapaTest
 
             if (e.Button == MouseButtons.Left)
             {
-                // Seleccionar origen de conexión
+                // Seleccionar origen 
                 if (marker != null)
                 {
                     _markerOrigenConexion = marker;
@@ -165,14 +165,14 @@ namespace MapaTest
             {
                 if (marker != null)
                 {
-                    // Click derecho SOBRE una persona → menú de marcador
+                    // Click derecho 
                     _markerSeleccionado = marker;
                     PrepararMenuMarker();
                     _ctxMarker.Show(gMapControl1.PointToScreen(e.Location));
                 }
                 else
                 {
-                    // Click derecho en vacío → menú del mapa
+                    // Click derecho 
                     _lastClickPoint = gMapControl1.FromLocalToLatLng(e.X, e.Y);
                     _ctxMapa.Show(gMapControl1.PointToScreen(e.Location));
                 }
@@ -332,7 +332,7 @@ namespace MapaTest
         private void gMapControl1_Load(object sender, EventArgs e) { }
         private void gMapControl1_Load_1(object sender, EventArgs e) { }
 
-        // Distancia Haversine (km)
+        // Haversine 
         private static double HaversineKm(PointLatLng a, PointLatLng b)
         {
             const double R = 6371.0088;
@@ -351,7 +351,6 @@ namespace MapaTest
         private static double ToRad(double deg) => deg * Math.PI / 180.0;
         private static double ToDeg(double rad) => rad * 180.0 / Math.PI;
 
-        // Curva gran-círculo (slerp)
         private GMapRoute RutaGranCirculo(PointLatLng a, PointLatLng b, int segmentos = 64)
         {
             double lat1 = ToRad(a.Lat), lon1 = ToRad(a.Lng);
@@ -421,7 +420,7 @@ namespace MapaTest
             }
         }
 
-        // Redibuja TODAS las conexiones padre–hijo existentes
+
         private void RedibujarRelaciones()
         {
             _overlayRutas.Routes.Clear();
@@ -517,7 +516,7 @@ namespace MapaTest
             distProm = (totalPares > 0) ? (sumaDistancias / totalPares) : 0;
         }
 
-        // ========= NUEVO: DISTANCIAS DESDE UNA PERSONA A TODAS =========
+        // Distancia uno a muchos
 
         private void VerDistanciasDesdeSeleccionado()
         {
@@ -569,7 +568,7 @@ namespace MapaTest
             gMapControl1.Refresh();
         }
 
-        // ========= EDITAR / ELIMINAR =========
+
 
         private void EditarPersonaSeleccionada()
         {
@@ -619,20 +618,17 @@ namespace MapaTest
 
             if (r != DialogResult.Yes) return;
 
-            // 1. Eliminar de la lista global
             DatosGlobales.Familia.Remove(persona);
 
-            // 2. Eliminar todas las relaciones de esa persona
             RelacionesFamilia.EliminarRelacionesDePersona(ced);
 
-            // 3. Eliminar también el nodo del grafo
+
             DatosGlobales.Grafo.EliminarPersona(ced);
 
-            // 4. Quitar el marcador del mapa
             _overlayPersonas.Markers.Remove(_markerSeleccionado);
             _markerSeleccionado = null;
 
-            // 5. Redibujar
+
             RedibujarRelaciones();
             gMapControl1.Refresh();
             ActualizarDistanciasExtremas();
@@ -644,7 +640,7 @@ namespace MapaTest
             var personas = DatosGlobales.Familia.ToList();
             var relaciones = RelacionesFamilia.Relaciones.ToList();
 
-            // Si ya existe una ventana de árbol y no está destruida, solo actualizamos y la traemos al frente
+            //Actualizamos y la traemos al frente
             if (_formArbol != null && !_formArbol.IsDisposed)
             {
                 _formArbol.ActualizarDatos(personas, relaciones);
@@ -654,13 +650,12 @@ namespace MapaTest
                 return;
             }
 
-            // Crear una nueva instancia y guardarla en el campo
+            // Crear una nueva instancia 
             _formArbol = new FormArbol(personas, relaciones)
             {
                 StartPosition = FormStartPosition.CenterParent
             };
 
-            // Importante: pasamos this como owner para que no “se pierda” detrás
             _formArbol.Show(this);
         }
 
@@ -678,7 +673,7 @@ namespace MapaTest
 
             if (principal == null)
             {
-                // Por si acaso no existiera, se crea uno nuevo
+                // Se crea uno nuevo
                 principal = new FormPrincipal();
             }
 
@@ -687,7 +682,7 @@ namespace MapaTest
             principal.WindowState = FormWindowState.Normal;
             principal.BringToFront();
 
-            // Cerrar el mapa actual (la app NO se cierra porque el principal sigue vivo)
+            // Cerrar el mapa actual
             this.Close();
         }
     }
@@ -703,17 +698,13 @@ namespace MapaTest
         // Lista global de relaciones padre–hijo
         public static List<RelacionFamilia> Relaciones { get; } = new List<RelacionFamilia>();
 
-        /// <summary>
-        /// Define una relación padre/madre -> hijo en la estructura lógica
-        /// Y también conecta esas dos personas en el grafo.
-        /// </summary>
         public static void DefinirPadreHijo(string cedulaPadre, string cedulaHijo)
         {
             if (string.IsNullOrWhiteSpace(cedulaPadre) || string.IsNullOrWhiteSpace(cedulaHijo))
                 return;
 
             if (cedulaPadre == cedulaHijo)
-                return; // no tiene sentido que alguien sea padre de sí mismo
+                return; 
 
             // Evitar duplicados
             bool yaExiste = Relaciones.Any(r =>
@@ -729,14 +720,10 @@ namespace MapaTest
                 });
             }
 
-            // === AQUÍ SE CONECTA TAMBIÉN EN EL GRAFO ===
+            // Conectar en el grafo
             DatosGlobales.Grafo.Conectar(cedulaPadre, cedulaHijo);
         }
 
-        /// <summary>
-        /// Elimina una relación padre–hijo específica
-        /// y desconecta esas personas en el grafo.
-        /// </summary>
         public static void EliminarRelacion(string cedulaPadre, string cedulaHijo)
         {
             Relaciones.RemoveAll(r =>
@@ -746,10 +733,7 @@ namespace MapaTest
             DatosGlobales.Grafo.Desconectar(cedulaPadre, cedulaHijo);
         }
 
-        /// <summary>
-        /// Elimina todas las relaciones donde participa una persona
-        /// y también limpia esas conexiones en el grafo.
-        /// </summary>
+     
         public static void EliminarRelacionesDePersona(string cedulaPersona)
         {
             var aEliminar = Relaciones

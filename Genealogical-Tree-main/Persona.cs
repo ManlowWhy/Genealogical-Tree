@@ -17,9 +17,9 @@ namespace MapaTest
         public double Longitud { get; set; }
         public string RutaFoto { get; set; }
 
-        // NUEVO: estado de vida / defunción
+    
         public bool EstaVivo { get; set; } = true;
-        public string FechaDefuncion { get; set; }      // null si está vivo
-        public string EdadAlFallecer { get; set; }      // null si está vivo
+        public string FechaDefuncion { get; set; }      
+        public string EdadAlFallecer { get; set; }     
     }
 }

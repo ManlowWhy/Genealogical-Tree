@@ -30,7 +30,7 @@ namespace MapaTest
             panelArbol.Paint += panelArbol_Paint;
         }
 
-        // Constructor con lat/lng, ahora sin imponer parentezco
+        // Constructor con lat/lng
         public FormRegistro(double lat, double lng,
                     TipoRelacion tipoRelacion = TipoRelacion.Libre,
                     Persona personaReferencia = null) : this()
@@ -44,7 +44,7 @@ namespace MapaTest
             // las personas se crean sin parentezco obligatorio
         }
 
-        // ===================== Árbol =====================
+
 
         private List<string> ObtenerPadresSegunParentezco(string parentezco)
         {
@@ -79,11 +79,11 @@ namespace MapaTest
             var g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-            // 1) Todas las personas que existen
+            // Personas existentes
             var personas = DatosGlobales.Familia.ToList();
             if (personas.Count == 0) return;
 
-            // 2) Crear un NodoVista por cada persona (clave = cédula)
+            //Crear un Nodo
             var nodos = new Dictionary<string, NodoVista>();
             foreach (var p in personas)
             {
@@ -94,7 +94,7 @@ namespace MapaTest
             }
             if (nodos.Count == 0) return;
 
-            // 3) Armar padre–hijo usando relaciones
+            // Armar padre–hijo 
             var padresCount = new Dictionary<string, int>();
             var padresPorCedula = new Dictionary<string, List<NodoVista>>();
 
@@ -114,7 +114,7 @@ namespace MapaTest
 
                 padresCount[rel.CedulaHijo]++;
 
-                // Construccion lista de padres para cada hijo
+
                 if (!padresPorCedula.TryGetValue(rel.CedulaHijo, out var listaPadres))
                 {
                     listaPadres = new List<NodoVista>();
@@ -124,7 +124,7 @@ namespace MapaTest
                     listaPadres.Add(padre);
             }
 
-            // 4) Calcular "profundidad hacia abajo"
+            // Calcular profundidad 
             var depth = new Dictionary<string, int>();
             foreach (var kv in nodos)
                 depth[kv.Key] = 0;
@@ -175,7 +175,7 @@ namespace MapaTest
                 kv.Value.Nivel = maxDepth - depth[ced];
             }
 
-            // 5) Layout
+            //Layout
             int nodoAncho = 160;
             int nodoAlto = 60;
             int margenX = 20;
@@ -259,7 +259,7 @@ namespace MapaTest
             }
         }
 
-        // ===================== GUARDAR PERSONA =====================
+
 
         private void buttonAgregarFamiliar_Click(object sender, EventArgs e)
         {
@@ -276,7 +276,7 @@ namespace MapaTest
                 textBoxCedula.Focus(); return;
             }
 
-            // Cédula debe ser SOLO números
+            // Cédula
             if (!long.TryParse(textBoxCedula.Text.Trim(), out _))
             {
                 MessageBox.Show("La cédula debe contener solo números enteros.",
@@ -287,10 +287,10 @@ namespace MapaTest
 
             string cedulaIngresada = textBoxCedula.Text.Trim();
 
-            // Estamos en modo edición si PersonaCreada NO es null
+
             bool esEdicion = PersonaCreada != null;
 
-            // Si estoy creando y ya existe esa cédula → error
+
             if (!esEdicion && DatosGlobales.Familia.Any(p => p.Cedula == cedulaIngresada))
             {
                 MessageBox.Show("Ya existe un familiar con esta cédula. Ingrese una diferente.",
@@ -299,7 +299,7 @@ namespace MapaTest
                 return;
             }
 
-            // Si estoy editando y la cédula coincide con la de OTRA persona → error
+
             if (esEdicion && DatosGlobales.Familia.Any(p => p != PersonaCreada && p.Cedula == cedulaIngresada))
             {
                 MessageBox.Show("Ya existe otro familiar con esta cédula. Ingrese una diferente.",
@@ -349,7 +349,7 @@ namespace MapaTest
                 edadEntera = CalcularEdad(fechaNacimientoValida, fechaDefuncionValida.Value);
             }
 
-            // Si el usuario escribe manualmente una edad válida, la respetamos
+
             if (!string.IsNullOrWhiteSpace(textBoxEdad.Text) &&
                 int.TryParse(textBoxEdad.Text, out int edadManual) && edadManual >= 0)
             {
@@ -379,18 +379,19 @@ namespace MapaTest
                 if (r == DialogResult.No) { textBoxRutaFoto.Focus(); return; }
             }
 
+            //Edición 
             Persona persona;
 
             if (esEdicion && PersonaCreada != null)
             {
-                // 👉 MODO EDICIÓN: actualizamos el OBJETO existente
+ 
                 persona = PersonaCreada;
 
                 persona.Nombre = textBoxNombre.Text.Trim();
-                persona.Cedula = cedulaIngresada; // en la práctica no cambia porque el textBox está ReadOnly
+                persona.Cedula = cedulaIngresada; 
                 persona.FechaNacimiento = fechaNacimientoValida.ToString("yyyy-MM-dd");
                 persona.Edad = edadEntera.ToString("F0", culture);
-                persona.Parentezco = ""; // se siguen manejando relaciones aparte
+                persona.Parentezco = ""; 
                 persona.Latitud = latitudValida;
                 persona.Longitud = longitudValida;
                 persona.RutaFoto = textBoxRutaFoto.Text.Trim();
@@ -398,18 +399,18 @@ namespace MapaTest
                 persona.FechaDefuncion = fechaDefuncionValida?.ToString("yyyy-MM-dd");
                 persona.EdadAlFallecer = estaVivo ? null : edadEntera.ToString("F0", culture);
 
-                // IMPORTANTE: NO se vuelve a agregar a DatosGlobales.Familia ni al grafo
+
             }
             else
             {
-                // 👉 MODO ALTA NUEVA: creamos y agregamos
+  
                 persona = new Persona
                 {
                     Nombre = textBoxNombre.Text.Trim(),
                     Cedula = cedulaIngresada,
                     FechaNacimiento = fechaNacimientoValida.ToString("yyyy-MM-dd"),
                     Edad = edadEntera.ToString("F0", culture),
-                    Parentezco = "", // ahora se manejan relaciones aparte
+                    Parentezco = "", 
                     Latitud = latitudValida,
                     Longitud = longitudValida,
                     RutaFoto = textBoxRutaFoto.Text.Trim(),
@@ -418,7 +419,7 @@ namespace MapaTest
                     EdadAlFallecer = estaVivo ? null : edadEntera.ToString("F0", culture)
                 };
 
-                // Agregar al grafo y a la lista global
+   
                 DatosGlobales.Grafo.AgregarPersona(persona);
                 DatosGlobales.Familia.Add(persona);
             }
@@ -426,7 +427,7 @@ namespace MapaTest
             // Redibujar el árbol del panel
             DibujarArbol();
 
-            // Devolvemos al que llamó la persona final (nueva o editada)
+
             PersonaCreada = persona;
 
             if (CloseOnSave || this.Modal)
@@ -456,7 +457,6 @@ namespace MapaTest
 
         private void labelEdad_Click(object sender, EventArgs e) { }
 
-        // ========= CÁLCULO DE EDAD =========
 
         private static int CalcularEdad(DateTime nacimiento, DateTime hasta)
         {
@@ -516,7 +516,7 @@ namespace MapaTest
 
             PersonaCreada = p;
 
-            // (opcional, pero recomendable)
+
             textBoxCedula.ReadOnly = true;
             buttonAgregarFamiliar.Text = "Guardar cambios";
 
@@ -529,7 +529,7 @@ namespace MapaTest
                 dtpNacimiento.Value = fecha;
             }
 
-            // Cargar fallecido / vivo
+            // Defunción
             checkBoxFallecido.Checked = !p.EstaVivo;
 
             if (!p.EstaVivo && DateTime.TryParse(p.FechaDefuncion, out var fechaDef))
