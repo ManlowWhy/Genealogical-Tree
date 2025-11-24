@@ -2198,11 +2198,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main (4)\\ArbolGen.Tests\\ArbolGen.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main 999\\ArbolGen.Tests\\ArbolGen.Tests.csproj",
       "projectName": "ArbolGen.Tests",
-      "projectPath": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main (4)\\ArbolGen.Tests\\ArbolGen.Tests.csproj",
+      "projectPath": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main 999\\ArbolGen.Tests\\ArbolGen.Tests.csproj",
       "packagesPath": "C:\\Users\\olman\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main (4)\\ArbolGen.Tests\\obj\\",
+      "outputPath": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main 999\\ArbolGen.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2223,8 +2223,8 @@
         "net48": {
           "targetAlias": "net48",
           "projectReferences": {
-            "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main (4)\\Genealogical-Tree-main\\MapaTest.csproj": {
-              "projectPath": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main (4)\\Genealogical-Tree-main\\MapaTest.csproj"
+            "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main 999\\Genealogical-Tree-main\\MapaTest.csproj": {
+              "projectPath": "C:\\Users\\olman\\Downloads\\Genealogical-Tree-main 999\\Genealogical-Tree-main\\MapaTest.csproj"
             }
           }
         }

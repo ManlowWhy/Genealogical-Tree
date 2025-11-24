@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MapaTest;
+#nullable disable
 
 namespace ArbolGen.Tests
 {
@@ -7,56 +8,68 @@ namespace ArbolGen.Tests
     [DoNotParallelize]
     public class GrafoFamiliarTests
     {
+        private GrafoFamiliar _grafo;
+
         [TestInitialize]
         public void Limpiar()
         {
-            GrafoFamiliar.Nodos.Clear();
+            
+            _grafo = new GrafoFamiliar();
         }
+
 
         [TestMethod]
-        public void AgregarNodo_GuardaEnDiccionarioPorParentezco()
+        public void AgregarPersona_AgregaNodoConCedulaEnDiccionario()
         {
-            var nodo = new NodoFamiliar
+            
+            var persona = new Persona
             {
-                Nombre = "Ana",
-                Parentezco = "Madre",
-                Latitud = 10,
-                Longitud = -84
+                Cedula = "111",
+                Nombre = "Ana"
             };
 
-            GrafoFamiliar.AgregarNodo(nodo);
+            
+            _grafo.AgregarPersona(persona);
 
-            Assert.IsTrue(GrafoFamiliar.Nodos.ContainsKey("Madre"));
-            Assert.AreSame(nodo, GrafoFamiliar.Nodos["Madre"]);
+            
+            Assert.IsTrue(
+                _grafo.Nodos.ContainsKey("111"),
+                "El grafo debe contener un nodo con la cédula de la persona agregada.");
+
+            var nodo = _grafo.Nodos["111"];
+            Assert.AreSame(
+                persona,
+                nodo.Persona,
+                "El nodo debe referenciar exactamente al objeto Persona agregado.");
         }
 
+  
         [TestMethod]
-        public void AgregarNodo_ConPadreAgregaHijoALaListaDeHijos()
+        public void Conectar_CuandoAmbosExisten_LosVuelveVecinosBidireccionales()
         {
-            var padre = new NodoFamiliar
-            {
-                Nombre = "Ana",
-                Parentezco = "Madre",
-                Latitud = 10,
-                Longitud = -84
-            };
+            
+            var p1 = new Persona { Cedula = "111", Nombre = "Ana" };
+            var p2 = new Persona { Cedula = "222", Nombre = "Luis" };
 
-            var hijo = new NodoFamiliar
-            {
-                Nombre = "Luis",
-                Parentezco = "Hijo",
-                Latitud = 11,
-                Longitud = -85
-            };
+            _grafo.AgregarPersona(p1);
+            _grafo.AgregarPersona(p2);
 
-            // Act: primero agregamos el padre, luego el hijo indicando el parentezco del padre
-            GrafoFamiliar.AgregarNodo(padre);
-            GrafoFamiliar.AgregarNodo(hijo, "Madre");
+            
+            _grafo.Conectar("111", "222");
 
-            // Assert: el padre debe tener exactamente un hijo, y debe ser ese nodo
-            Assert.AreEqual(1, padre.Hijos.Count, "El padre debe tener exactamente un hijo.");
-            Assert.AreSame(hijo, padre.Hijos[0], "El hijo agregado debe ser el mismo nodo que se pasó.");
+            
+            var nodo1 = _grafo.Nodos["111"];
+            var nodo2 = _grafo.Nodos["222"];
+
+            CollectionAssert.Contains(
+                nodo1.Vecinos,
+                "222",
+                "La cédula 222 debe aparecer como vecina de la 111.");
+
+            CollectionAssert.Contains(
+                nodo2.Vecinos,
+                "111",
+                "La cédula 111 debe aparecer como vecina de la 222.");
         }
-
     }
 }
